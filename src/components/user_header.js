@@ -1,21 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import UserIcon from "./user_icon";
 
 export default function UserHeader(props) {
   return (
-    <View style={[styles.container, {flex: props.flex_size}]}>
-      <View style={{flex:1}}>
-        <FontAwesomeIcon icon={ faUser } color={ '#DEB841'} />
+    <SafeAreaView style={[styles.container, {flex: props.flex_size}]}>
+      <View style={{flex:2, justifyContent: 'center', alignItems: 'center'}}>
+        <UserIcon />
       </View>
-      <View style={{flex:1}}>
+      <View style={{flex:3}}>
         <Text>User Name</Text>
       </View>
-      <View style={{flex:1}}>
+      <View style={{flex:2}}>
         <Text>Chat</Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -24,5 +23,5 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     backgroundColor: '#6D6A75'
-  }
+  },
 });
