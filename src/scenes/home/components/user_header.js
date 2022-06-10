@@ -28,7 +28,6 @@ export default function UserHeader(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     flexDirection: 'row',
     backgroundColor: '#6D6A75'
   },
@@ -38,7 +37,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   user_info_view:{
-    flex:4,
+    flex:3,
     paddingTop: 20
   },
   user_name: {
@@ -60,6 +59,6 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   chat_view: {
-    flex: 1
+    flex: 2
   }
 });
