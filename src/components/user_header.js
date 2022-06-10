@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function UserHeader(props) {
   return (
     <View style={[styles.container, {flex: props.flex_size}]}>
       <View style={{flex:1}}>
-        <Text>User Photo</Text>
+        <FontAwesomeIcon icon={ faUser } color={ '#DEB841'} />
       </View>
       <View style={{flex:1}}>
         <Text>User Name</Text>
