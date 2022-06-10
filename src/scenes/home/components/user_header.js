@@ -1,8 +1,9 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import UserIcon from "./user_icon";
+import ChatIcon from "./chat_icon";
 
 export default function UserHeader(props) {
   return (
@@ -20,7 +21,9 @@ export default function UserHeader(props) {
         </View>
       </View>
       <View style={styles.chat_view}>
-        <Text>Chat</Text>
+        <Pressable onPress={() => {alert('Chat')}}>
+          <ChatIcon unreadNo={2} />
+        </Pressable>
       </View>
     </SafeAreaView>
   );
@@ -59,6 +62,8 @@ const styles = StyleSheet.create({
     marginTop: 5
   },
   chat_view: {
-    flex: 2
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
