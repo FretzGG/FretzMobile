@@ -7,19 +7,19 @@ import UserIcon from "./user_icon";
 export default function UserHeader(props) {
   return (
     <SafeAreaView style={[styles.container, {flex: props.flex_size}]}>
-      <View style={{flex:2, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={styles.user_icon_view}>
         <UserIcon />
       </View>
-      <View style={{flex:4, paddingTop: 20}}>
-        <Text style={styles.user_info}>Guguinha dos Santos</Text>
-        <View style={{flex: 1, flexDirection: 'row', paddingTop: 5}}>
-          <View style={{paddingTop: 3}}>
+      <View style={styles.user_info_view}>
+        <Text style={styles.user_name}>Guguinha dos Santos</Text>
+        <View style={styles.user_rating_view}>
+          <View style={styles.user_rating_star}>
             <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
           </View>
-          <Text style={[styles.user_info, {marginTop: 5}]}> 4.87</Text>
+          <Text style={styles.user_rating}> 4.87</Text>
         </View>
       </View>
-      <View style={{flex:1}}>
+      <View style={styles.chat_view}>
         <Text>Chat</Text>
       </View>
     </SafeAreaView>
@@ -32,9 +32,34 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#6D6A75'
   },
-  user_info: {
+  user_icon_view: {
+    flex:2,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  user_info_view:{
+    flex:4,
+    paddingTop: 20
+  },
+  user_name: {
     color: '#E6E6E6',
     fontWeight: 'bold',
     fontSize: 18
+  },
+  user_rating_view:{
+    flexDirection: 'row',
+    paddingTop: 5
+  },
+  user_rating_star: {
+    paddingTop: 3
+  },
+  user_rating: {
+    color: '#E6E6E6',
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 5
+  },
+  chat_view: {
+    flex: 1
   }
 });
