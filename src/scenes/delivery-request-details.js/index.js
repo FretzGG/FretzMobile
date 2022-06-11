@@ -66,7 +66,7 @@ export default function DeliveryRequestDetails(props) {
           onPress={() => {
             alert('Motoristas interessados')
         }}>
-          <Text>Motoristas Interassados</Text>
+          <Text style={styles.auction_button_text}>Motoristas Interessados</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -135,6 +135,15 @@ const styles = StyleSheet.create({
     fontSize: 40
   },
   auction_button: {
-    backgroundColor: '#DEB841'
+    backgroundColor: '#DEB841',
+    flexDirection: 'row',
+    marginTop: 20,
+    borderRadius: 25,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+  },
+  auction_button_text: {
+    color: '#37323E',
+    fontWeight: 'bold'
   }
 });
