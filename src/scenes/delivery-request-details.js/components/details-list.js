@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import PackagePhotos from "./package-photos";
 
 export default function DetailList() {
   const [unseenInterests, setUnseenInterests] = useState(0);
@@ -10,7 +11,7 @@ export default function DetailList() {
     <ScrollView style={styles.container}>
       <View style={styles.top_row}>
         <View style={{flex: 3}}>
-          <Text>Fotos do pacote</Text>
+          <PackagePhotos />
         </View>
         <View style={{flex: 2}}>
           <View style={styles.type_and_deadline_view}>
