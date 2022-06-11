@@ -59,7 +59,15 @@ export default function DeliveryRequestDetails(props) {
         </View>
       </View>
       <View style={styles.price_row}>
-        <Text>Preco e Leilao</Text>
+        <Text style={styles.price_title}>Preço desejado</Text>
+        <Text style={styles.price_number}>R$ 500,00</Text>
+        <TouchableOpacity
+          style={styles.auction_button}
+          onPress={() => {
+            alert('Motoristas interessados')
+        }}>
+          <Text>Motoristas Interassados</Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -112,6 +120,21 @@ const styles = StyleSheet.create({
     marginRight: 15,
   },
   price_row: {
-    flex: 3
+    flex: 3,
+    alignItems: 'center',
+    marginTop: 30
+  },
+  price_title: {
+    color: '#DEB841',
+    fontWeight: 'bold',
+    fontSize: 40
+  },
+  price_number: {
+    color: '#E6E6E6',
+    fontWeight: 'bold',
+    fontSize: 40
+  },
+  auction_button: {
+    backgroundColor: '#DEB841'
   }
 });
