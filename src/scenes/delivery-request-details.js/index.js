@@ -13,7 +13,7 @@ export default function DeliveryRequestDetails(props) {
         <View style={{flex: 2}}>
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Tipo</Text>
-            <Text style={styles.type_and_deadline_text}>Frágil</Text>
+            <Text style={[styles.type_and_deadline_text, {textDecorationLine: 'underline'}]}>Frágil</Text>
           </View>
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Prazo</Text>
@@ -22,7 +22,20 @@ export default function DeliveryRequestDetails(props) {
         </View>
       </View>
       <View style={styles.text_row}>
-        <Text>Descricao e Endereco</Text>
+        <View style={styles.description_and_address_view}>
+          <Text style={styles.section_title}>Descrição</Text>
+          <Text style={styles.description_and_address_text}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit purus tellus, eget bibendum quam cursus non. Mauris ut dolor nulla. Integer cursus viverra ornare. Sed id molestie tortor.
+          </Text>
+        </View>
+        <View style={styles.description_and_address_view}>
+          <Text style={styles.section_title}>Endereço</Text>
+          <Text style={styles.description_and_address_text}>
+            Avenida Brigadeiro Lima 123, Vila Industrial{"\n"}
+            12223-123{"\n"}
+            São José dos Campos - São Paulo
+          </Text>
+        </View>
       </View>
       <View style={styles.attachment_row}>
         <Text>Anexos</Text>
@@ -55,11 +68,21 @@ const styles = StyleSheet.create({
   },
   type_and_deadline_text: {
     color: '#E6E6E6',
-    fontWeight: 'bold',
-    
+    fontWeight: 'bold'
   },
   text_row: {
-    flex: 3
+    flex: 3,
+    marginTop: 10,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  description_and_address_view: {
+    marginBottom: 10
+  },
+  description_and_address_text: {
+    color: '#E6E6E6',
+    textAlign: 'justify',
+    marginTop: 10
   },
   attachment_row: {
     flex: 1
