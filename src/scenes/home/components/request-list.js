@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function RequestList(props){
+  const navigation = useNavigation();
+
   const [requests, setRequests] = useState([
     {id: 1, title: 'Requisição 1'},
     {id: 2, title: 'Requisição 2'},
@@ -11,7 +14,7 @@ export default function RequestList(props){
 
   const Item = ({title}) => (
     <View style={styles.item_box}>
-      <TouchableOpacity onPress={() => {alert('Ver detalhes de ' + title)}} style={styles.item_view}>
+      <TouchableOpacity onPress={() => {navigation.navigate('Delivery Request')}} style={styles.item_view}>
         <Text style={styles.item_text}>
           {title}
         </Text>
