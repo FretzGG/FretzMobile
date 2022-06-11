@@ -11,7 +11,9 @@ export default function DetailList() {
     <ScrollView style={styles.container}>
       <View style={styles.top_row}>
         <View style={{flex: 3}}>
-          <PackagePhotos />
+          <View style={{marginStart: 15}}>
+            <PackagePhotos />
+          </View>
         </View>
         <View style={{flex: 2}}>
           <View style={styles.type_and_deadline_view}>
