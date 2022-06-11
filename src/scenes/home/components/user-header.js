@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import UserIcon from "./user-icon";
@@ -11,7 +11,7 @@ export default function UserHeader(props) {
   const user_types = ['ClientePF', 'ClientePJ', 'Motorista']
 
   return (
-    <SafeAreaView style={[styles.container, {flex: props.flex_size}]}>
+    <View style={[styles.container, {flex: props.flex_size}]}>
       <TouchableOpacity onPress={() => {
         setType((type+1)%3);
       }} style={styles.user_icon_view}>
@@ -31,7 +31,7 @@ export default function UserHeader(props) {
           <ChatIcon unreadNo={2} />
         </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 

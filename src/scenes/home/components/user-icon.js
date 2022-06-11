@@ -1,11 +1,11 @@
 import React from "react";
-import { SafeAreaView, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faIndustry, faTruckFast } from "@fortawesome/free-solid-svg-icons";
 
 export default function UserIcon(props) {
   return(
-    <SafeAreaView>
+    <View>
       <View style={styles.user_photo_circle}>
         <FontAwesomeIcon 
           icon={faUser}
@@ -30,7 +30,7 @@ export default function UserIcon(props) {
             size={30}
           />
         </View>}
-    </SafeAreaView>
+    </View>
   );
 }
 
