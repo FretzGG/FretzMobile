@@ -14,7 +14,6 @@ export default function UserHeader(props) {
     <SafeAreaView style={[styles.container, {flex: props.flex_size}]}>
       <TouchableOpacity onPress={() => {
         setType((type+1)%3);
-        alert(user_types[(type+1)%3])
       }} style={styles.user_icon_view}>
         <UserIcon userType={user_types[type]}/>
       </TouchableOpacity>
