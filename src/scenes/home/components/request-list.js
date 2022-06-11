@@ -14,7 +14,14 @@ export default function RequestList(props){
 
   const Item = ({title}) => (
     <View style={styles.item_box}>
-      <TouchableOpacity onPress={() => {navigation.navigate('Delivery Request')}} style={styles.item_view}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate('Delivery Request', {
+            title: title
+          });
+        }} 
+        style={styles.item_view}
+      >
         <Text style={styles.item_text}>
           {title}
         </Text>
