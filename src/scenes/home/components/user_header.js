@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -6,11 +6,18 @@ import UserIcon from "./user_icon";
 import ChatIcon from "./chat_icon";
 
 export default function UserHeader(props) {
+  const [type, setType] = useState(0);
+
+  const user_types = ['ClientePF', 'ClientePJ', 'Motorista']
+
   return (
     <SafeAreaView style={[styles.container, {flex: props.flex_size}]}>
-      <View style={styles.user_icon_view}>
-        <UserIcon />
-      </View>
+      <TouchableOpacity onPress={() => {
+        setType((type+1)%3);
+        alert(user_types[(type+1)%3])
+      }} style={styles.user_icon_view}>
+        <UserIcon userType={user_types[type]}/>
+      </TouchableOpacity>
       <View style={styles.user_info_view}>
         <Text style={styles.user_name}>Guguinha dos Santos</Text>
         <View style={styles.user_rating_view}>
