@@ -15,7 +15,7 @@ export default function ChatIcon(props) {
       <View style={styles.chat_circle}>
         <FontAwesomeIcon
           icon={faComment}
-          color={ '#DEB841'}
+          color={'#DEB841'}
           size={43} 
         />
       </View>
