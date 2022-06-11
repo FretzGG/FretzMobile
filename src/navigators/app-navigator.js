@@ -1,10 +1,8 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import HomeScreen from "../scenes/home";
-import DeliveryRequestDetails from "../scenes/delivery-request-details.js";
+import DeliveryRequestDetails from "../scenes/delivery-request-details";
+import DeliveryRequestForm from "../scenes/delivery-request-form";
 
 const Stack = createNativeStackNavigator();
 
@@ -24,21 +22,26 @@ export default function AppNavigator() {
           headerTintColor: '#DEB841',
           headerStyle: {
             backgroundColor: '#6D6A75',
-
           },
           headerTitleStyle: {
             color: '#E6E6E6'
           },
           headerTitleAlign: 'center',
-          headerRight: () => (
-            <TouchableOpacity>
-              <FontAwesomeIcon 
-                icon={faPenToSquare}
-                color='#DEB841'
-                size={25}
-              />
-            </TouchableOpacity>
-          )
+        })}
+      />
+      <Stack.Screen
+        name='Delivery Request Form'
+        component={DeliveryRequestForm}
+        options={({route}) => ({
+          title: route.params.title,
+          headerTintColor: '#DEB841',
+          headerStyle: {
+            backgroundColor: '#6D6A75',
+          },
+          headerTitleStyle: {
+            color: '#E6E6E6'
+          },
+          headerTitleAlign: 'center'
         })}
       />
     </Stack.Navigator>

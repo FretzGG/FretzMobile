@@ -47,11 +47,15 @@ export default function RequestList(props){
           />
           <Text style={styles.request_header_text}>   Minhas Requisições</Text>
         </View>
-        <TouchableOpacity onPress={() => {alert('Adicionar requisicao')}} style={styles.request_header_add_view}>
-          <FontAwesomeIcon 
-            icon={faPlus}
-            color={'#DEB841'}
-            size={30}
+        <TouchableOpacity onPress={() => 
+          navigation.navigate('Delivery Request Form', {
+            title: 'Novo Frete'
+          })} 
+          style={styles.request_header_add_view}>
+            <FontAwesomeIcon 
+              icon={faPlus}
+              color={'#DEB841'}
+              size={30}
           />
         </TouchableOpacity>
       </View>
