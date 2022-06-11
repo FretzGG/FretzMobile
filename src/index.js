@@ -1,8 +1,11 @@
 import React from "react";
-import HomeScreen from "./scenes/home";
+import { NavigationContainer } from "@react-navigation/native";
+import AppNavigator from "./navigators/app-navigator";
 
 export default function App() {
   return (
-    <HomeScreen />
+    <NavigationContainer>
+      <AppNavigator />
+    </NavigationContainer>
   );
 }
