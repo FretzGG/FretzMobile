@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import PackagePhotos from "./package-photos";
 
-export default function DetailList() {
+export default function DetailsList() {
   const [unseenInterests, setUnseenInterests] = useState(0);
 
   return (
