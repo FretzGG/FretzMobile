@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 
-export default function DetailList(props) {
+export default function DetailList() {
+  const [unseenInterests, setUnseenInterests] = useState(0);
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.top_row}>
@@ -58,13 +60,23 @@ export default function DetailList(props) {
       </View>
       <View style={styles.price_row}>
         <Text style={styles.price_title}>Preço desejado</Text>
-        <Text style={styles.price_number}>R$ 500,00</Text>
+        <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ 500,00</Text>
         <TouchableOpacity
           style={styles.auction_button}
           onPress={() => {
-            alert('Motoristas interessados')
+            setUnseenInterests(0);
         }}>
-          <Text style={styles.auction_button_text}>Motoristas Interessados</Text>
+          <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
+          {unseenInterests > 0 && (
+            <View style={styles.auction_button_unseen}>
+              <Text style={{
+                color: '#E6E6E6',
+                fontWeight: 'bold',
+              }}>
+                {unseenInterests}
+              </Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -143,5 +155,13 @@ const styles = StyleSheet.create({
   auction_button_text: {
     color: '#37323E',
     fontWeight: 'bold'
+  },
+  auction_button_unseen: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#E15252',
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
