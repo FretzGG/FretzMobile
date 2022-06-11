@@ -17,7 +17,7 @@ export default function AppNavigator() {
         options={{header: () => null}} 
       />
       <Stack.Screen
-        name='Delivery Request'
+        name='Delivery Request Details'
         component={DeliveryRequestDetails}
         options={({route}) => ({
           title: route.params.title, 

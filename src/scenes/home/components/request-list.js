@@ -16,7 +16,7 @@ export default function RequestList(props){
     <View style={styles.item_box}>
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate('Delivery Request', {
+          navigation.navigate('Delivery Request Details', {
             title: title
           });
         }} 
