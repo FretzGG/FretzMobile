@@ -66,6 +66,7 @@ export default function DetailList() {
           style={styles.auction_button}
           onPress={() => {
             setUnseenInterests(0);
+            alert('Mostrar motoristas interessados');
         }}>
           <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
           {unseenInterests > 0 && (
