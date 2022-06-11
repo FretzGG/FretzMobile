@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
-import UserIcon from "./user_icon";
-import ChatIcon from "./chat_icon";
+import UserIcon from "./user-icon";
+import ChatIcon from "./chat-icon";
 
 export default function UserHeader(props) {
   const [type, setType] = useState(0);
