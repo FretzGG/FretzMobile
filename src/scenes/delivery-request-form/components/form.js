@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
 import DocumentPicker, { types } from 'react-native-document-picker'
 
-export default function Form() {
+export default function Form(props) {
+  const navigation = useNavigation();
   // TODO: Descobrir forma de altera o valor previsto
   // TODO: Mostrar todos os arquivos selecionados
 
@@ -75,8 +77,8 @@ export default function Form() {
       >
         <Text style={{color: '#37323E'}}>
           {files.length > 0 ?
-              'Arquivos selecionados: \n' + files[0].name
-            : 'Selecione um anexo (opcional)'
+            'Arquivos selecionados: \n' + files[0].name :
+            'Selecione um anexo (opcional)'
           }
         </Text>
       </TouchableOpacity>
@@ -92,6 +94,16 @@ export default function Form() {
           onChangeText={setSuggestedPrice}
         />
         <Text style={{color: '#E6E6E6', marginTop: -10}}>Toque para alterar valor</Text>
+      </View>
+      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity style={styles.form_submit_button}>
+          <Text style={styles.form_submit_text}>
+            {props.title === 'Novo Frete' ?
+              'Criar' : 
+              'Salvar'
+            }
+          </Text>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -174,5 +186,18 @@ const styles = StyleSheet.create({
     color: '#E6E6E6',
     marginTop: -15,
     fontSize: 40,
+  },
+  form_submit_button:{
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 30,
+    backgroundColor: '#DEB841',
+    padding: 10,
+    width: '45%',
+    borderRadius: 25,
+  },
+  form_submit_text:{
+    color: '#37323E',
+    fontWeight: 'bold'
   }
 });
