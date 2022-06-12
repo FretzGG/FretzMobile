@@ -119,6 +119,7 @@ const styles = StyleSheet.create({
   },
   multiline_text_input: {
     backgroundColor: '#E6E6E6',
+    color: '#37323E',
     marginTop: 10,
     borderRadius: 30,
     width: "96%",
