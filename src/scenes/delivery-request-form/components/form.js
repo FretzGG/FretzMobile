@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
+import DocumentPicker, { types } from 'react-native-document-picker'
 
 export default function Form() {
   // TODO: Descobrir forma de altera o valor previsto
+  // TODO: Mostrar todos os arquivos selecionados
 
   const type_options = ['Frágil', 'Perecível'];
 
@@ -13,6 +15,7 @@ export default function Form() {
   const [selectedOption, setSelectedOption] = useState(type_options[0]);
   const [address, setAddress] = useState('')
   const [deadline, setDeadline] = useState('')
+  const [files, setFiles] = useState([])
   const [suggestedPrice, setSuggestedPrice] = useState('')
 
   return (
@@ -58,12 +61,24 @@ export default function Form() {
         keyboardType={'numeric'}
         value={deadline}
         onChangeText={setDeadline}
+        placeholderTextColor={'#37323E'}
       />
       <Text style={styles.input_title}>Anexos</Text>
       <TouchableOpacity
-        style={[styles.text_input, {paddingVertical: 10}]}
+        style={styles.attachment_input}
+        onPress={async () => {
+          const response = await DocumentPicker.pickMultiple({
+            type: types.pdf
+          })
+          setFiles(response)
+        }}
       >
-        <Text>Anexos</Text>
+        <Text style={{color: '#37323E'}}>
+          {files.length > 0 ?
+              'Arquivos selecionados: \n' + files[0].name
+            : 'Selecione um anexo (opcional)'
+          }
+        </Text>
       </TouchableOpacity>
       <View style={styles.price_view}>
         <Text style={styles.price_title}>Valor previsto</Text>
@@ -95,6 +110,7 @@ const styles = StyleSheet.create({
   },
   text_input: {
     backgroundColor: '#E6E6E6',
+    color: '#37323E',
     marginTop: 10,
     borderRadius: 30,
     width: "96%",
@@ -108,6 +124,15 @@ const styles = StyleSheet.create({
     width: "96%",
     height: 88,
     paddingHorizontal: 20
+  },
+  attachment_input: {
+    backgroundColor: '#E6E6E6',
+    color: '#37323E',
+    marginTop: 10,
+    borderRadius: 30,
+    width: "96%",
+    paddingHorizontal: 20,
+    paddingVertical: 10
   },
   dropdown_button: {
     backgroundColor: '#E6E6E6',
