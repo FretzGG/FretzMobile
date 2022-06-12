@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
 
@@ -16,7 +16,7 @@ export default function Form() {
   const [suggestedPrice, setSuggestedPrice] = useState('')
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.input_title}>Nome da Carga</Text>
       <TextInput 
         style={styles.text_input}
@@ -59,6 +59,12 @@ export default function Form() {
         value={deadline}
         onChangeText={setDeadline}
       />
+      <Text style={styles.input_title}>Anexos</Text>
+      <TouchableOpacity
+        style={[styles.text_input, {paddingVertical: 10}]}
+      >
+        <Text>Anexos</Text>
+      </TouchableOpacity>
       <View style={styles.price_view}>
         <Text style={styles.price_title}>Valor previsto</Text>
         <MaskInput
@@ -72,7 +78,7 @@ export default function Form() {
         />
         <Text style={{color: '#E6E6E6', marginTop: -10}}>Toque para alterar valor</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -91,14 +97,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#E6E6E6',
     marginTop: 10,
     borderRadius: 30,
-    width: "96%"
+    width: "96%",
+    height: 44,
+    paddingHorizontal: 20
   },
   dropdown_button: {
     backgroundColor: '#E6E6E6',
     borderRadius: 30,
     justifyContent: 'center',
     width: "96%",
-    height: 40
+    height: 44,
+    paddingHorizontal: 20
   },
   dropdown_text_selected:{
     color: '#37323E',
