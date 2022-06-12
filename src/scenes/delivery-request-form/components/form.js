@@ -25,7 +25,6 @@ export default function Form() {
         options={type_options}
         dropdownStyle={styles.dropdown_style}
         dropdownTextStyle={styles.dropdown_text_options}
-        dropdownTextHighlightStyle={styles.dropdown_text_highlighted}
         onSelect={(index) => setSelectedOption(type_options[index])}
       >
         <View style={styles.dropdown_button}>
@@ -82,7 +81,4 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 30,
     marginTop: -20,
   },
-  dropdown_text_highlighted: {
-    color: '#37323E'
-  }
 });
