@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
     marginTop: -20,
   },
   price_view: {
+    marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center'
   },
