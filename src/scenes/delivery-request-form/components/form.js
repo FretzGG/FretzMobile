@@ -26,7 +26,7 @@ export default function Form() {
       />
       <Text style={styles.input_title}>Descrição</Text>
       <TextInput 
-        style={styles.text_input}
+        style={styles.multiline_text_input}
         autoCapitalize={'sentences'}
         multiline={true}
         numberOfLines={4}
@@ -99,6 +99,14 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: "96%",
     height: 44,
+    paddingHorizontal: 20
+  },
+  multiline_text_input: {
+    backgroundColor: '#E6E6E6',
+    marginTop: 10,
+    borderRadius: 30,
+    width: "96%",
+    height: 88,
     paddingHorizontal: 20
   },
   dropdown_button: {
