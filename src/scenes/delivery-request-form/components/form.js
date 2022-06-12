@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 
 export default function Form() {
+  // TODO: Descobrir forma de altera o valor previsto
+
   const type_options = ['Frágil', 'Perecível'];
+
   const [selectedOption, setSelectedOption] = useState(type_options[0]);
+  const [suggestedPrice, setSuggestedPrice] = useState(0)
 
   return (
     <View style={styles.container}>
@@ -36,6 +40,15 @@ export default function Form() {
         style={styles.text_input}
         autoCapitalize={'sentences'}
       />
+      <View style={styles.price_view}>
+        <Text style={styles.price_title}>Valor previsto</Text>
+        <TouchableOpacity onPress={() => {
+          setSuggestedPrice(suggestedPrice + 100)
+        }}>
+          <Text style={styles.price_number}>R$ {suggestedPrice},00</Text>
+        </TouchableOpacity>
+          <Text style={{color: '#E6E6E6'}}>Toque para alterar valor</Text>
+      </View>
     </View>
   );
 }
@@ -81,4 +94,18 @@ const styles = StyleSheet.create({
     borderBottomStartRadius: 30,
     marginTop: -20,
   },
+  price_view: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  price_title: {
+    color: '#DEB841',
+    fontWeight: 'bold',
+    fontSize: 40
+  },
+  price_number: {
+    color: '#E6E6E6',
+    fontWeight: 'bold',
+    fontSize: 40
+  }
 });
