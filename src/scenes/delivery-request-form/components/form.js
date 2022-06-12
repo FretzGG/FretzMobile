@@ -1,14 +1,19 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
+import MaskInput, { Masks } from "react-native-mask-input";
 
 export default function Form() {
   // TODO: Descobrir forma de altera o valor previsto
 
   const type_options = ['Frágil', 'Perecível'];
 
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('')
   const [selectedOption, setSelectedOption] = useState(type_options[0]);
-  const [suggestedPrice, setSuggestedPrice] = useState(0)
+  const [address, setAddress] = useState('')
+  const [deadline, setDeadline] = useState('')
+  const [suggestedPrice, setSuggestedPrice] = useState('')
 
   return (
     <View style={styles.container}>
@@ -16,6 +21,8 @@ export default function Form() {
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
+        value={title}
+        onChangeText={setTitle}
       />
       <Text style={styles.input_title}>Descrição</Text>
       <TextInput 
@@ -23,6 +30,8 @@ export default function Form() {
         autoCapitalize={'sentences'}
         multiline={true}
         numberOfLines={4}
+        value={description}
+        onChangeText={setDescription}
       />
       <Text style={styles.input_title}>Tipo</Text>
       <ModalDropdown 
@@ -35,19 +44,33 @@ export default function Form() {
           <Text style={styles.dropdown_text_selected}>{selectedOption}</Text>
         </View>
       </ModalDropdown>
-      <Text style={styles.input_title}>Enderço</Text>
+      <Text style={styles.input_title}>Endereço</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
+        value={address}
+        onChangeText={setAddress}
+      />
+      <Text style={styles.input_title}>Prazo de entrega</Text>
+      <MaskInput
+        style={styles.text_input}
+        mask={Masks.DATE_DDMMYYYY}
+        keyboardType={'numeric'}
+        value={deadline}
+        onChangeText={setDeadline}
       />
       <View style={styles.price_view}>
         <Text style={styles.price_title}>Valor previsto</Text>
-        <TouchableOpacity onPress={() => {
-          setSuggestedPrice(suggestedPrice + 100)
-        }}>
-          <Text style={styles.price_number}>R$ {suggestedPrice},00</Text>
-        </TouchableOpacity>
-          <Text style={{color: '#E6E6E6'}}>Toque para alterar valor</Text>
+        <MaskInput
+          style={styles.price_number}
+          mask={Masks.BRL_CURRENCY}
+          placeholder={'R$ 0,00'}
+          placeholderTextColor={'#E6E6E6'}
+          keyboardType={'numeric'}
+          value={suggestedPrice}
+          onChangeText={setSuggestedPrice}
+        />
+        <Text style={{color: '#E6E6E6', marginTop: -10}}>Toque para alterar valor</Text>
       </View>
     </View>
   );
@@ -106,7 +129,7 @@ const styles = StyleSheet.create({
   },
   price_number: {
     color: '#E6E6E6',
-    fontWeight: 'bold',
-    fontSize: 40
+    marginTop: -15,
+    fontSize: 40,
   }
 });
