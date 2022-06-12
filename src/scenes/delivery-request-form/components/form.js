@@ -69,10 +69,15 @@ export default function Form(props) {
       <TouchableOpacity
         style={styles.attachment_input}
         onPress={async () => {
-          const response = await DocumentPicker.pickMultiple({
-            type: types.pdf
-          })
-          setFiles(response)
+          try{
+            const response = await DocumentPicker.pickMultiple({
+              type: types.pdf
+            })
+            setFiles(response)
+          }
+          catch(err){
+            alert('Nenhum documento selecionado')
+          }
         }}
       >
         <Text style={{color: '#37323E'}}>
