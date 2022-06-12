@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import ModalDropdown from "react-native-modal-dropdown";
 
 export default function Form() {
+  const type_options = ['Frágil', 'Perecível'];
+  const [selectedOption, setSelectedOption] = useState(type_options[0]);
+
   return (
     <View style={styles.container}>
       <Text style={styles.input_title}>Nome da Carga</Text>
@@ -17,10 +21,17 @@ export default function Form() {
         numberOfLines={4}
       />
       <Text style={styles.input_title}>Tipo</Text>
-      <TextInput 
-        style={styles.text_input}
-        autoCapitalize={'sentences'}
-      />
+      <ModalDropdown 
+        options={type_options}
+        dropdownStyle={styles.dropdown_style}
+        dropdownTextStyle={styles.dropdown_text_options}
+        dropdownTextHighlightStyle={styles.dropdown_text_highlighted}
+        onSelect={(index) => setSelectedOption(type_options[index])}
+      >
+        <View style={styles.dropdown_button}>
+          <Text style={styles.dropdown_text_selected}>{selectedOption}</Text>
+        </View>
+      </ModalDropdown>
       <Text style={styles.input_title}>Enderço</Text>
       <TextInput 
         style={styles.text_input}
@@ -46,5 +57,32 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 30,
     width: "96%"
+  },
+  dropdown_button: {
+    backgroundColor: '#E6E6E6',
+    borderRadius: 30,
+    justifyContent: 'center',
+    width: "96%",
+    height: 40
+  },
+  dropdown_text_selected:{
+    color: '#37323E',
+    marginLeft: 5,
+  },
+  dropdown_text_options: {
+    backgroundColor: '#E6E6E6',
+    color: '#37323E',
+    fontSize: 13,
+  },
+  dropdown_style: {
+    backgroundColor: '#E6E6E6',
+    borderBottomColor: '#37323E',
+    width: '92.5%',
+    borderBottomEndRadius: 30,
+    borderBottomStartRadius: 30,
+    marginTop: -20,
+  },
+  dropdown_text_highlighted: {
+    color: '#37323E'
   }
 });
