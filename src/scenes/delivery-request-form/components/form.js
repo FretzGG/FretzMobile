@@ -101,7 +101,10 @@ export default function Form(props) {
         <Text style={{color: '#E6E6E6', marginTop: -10}}>Toque para alterar valor</Text>
       </View>
       <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity style={styles.form_submit_button}>
+        <TouchableOpacity 
+          style={styles.form_submit_button}
+          onPress={() => navigation.goBack()}
+        >
           <Text style={styles.form_submit_text}>
             {props.title === 'Novo Frete' ?
               'Criar' : 
