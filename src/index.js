@@ -1,12 +1,14 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { SafeAreaView, View } from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+
+import LoginRegister from './navigators/LoginRegister'
 
 export default function App() {
   return (
-    <View>
-      <Text>
-        Hello World!
-      </Text>
-    </View>
+    <NavigationContainer style={{ flex: 1 }}>
+      <LoginRegister />
+    </NavigationContainer>
   );
 }
