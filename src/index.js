@@ -1,11 +1,11 @@
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./navigators/app-navigator";
+import { NavigationContainer } from '@react-navigation/native';
+import LoginRegister from './navigators/LoginRegister'
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AppNavigator />
+    <NavigationContainer style={{ flex: 1 }}>
+      <LoginRegister />
     </NavigationContainer>
   );
 }
