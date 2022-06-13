@@ -1,14 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { Text, View, TouchableOpacity, TextInput, Alert, StyleSheet } from 'react-native';
+import React from 'react';
+import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 
 
 export default function Topo() {
   const navigation = useNavigation();
-
-  const [nome, setNome] = useState('');
-  const [data, setData] = useState('');
-
+  
   return <View style = {estilos.container}>
     <Text style = {estilos.fonte}>LOG IN</Text>
     <TextInput
@@ -98,3 +95,4 @@ const estilos = StyleSheet.create({
     color: '#E6E6E6',
   },
 });
+

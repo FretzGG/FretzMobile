@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function Topo() {
-  const [nome, setNome] = useState('');
-  const [data, setData] = useState('');
+  const navigation = useNavigation();
 
   return (
     <View style = {estilos.container} >
@@ -16,7 +16,12 @@ export default function Topo() {
             Pessoa Física
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={estilos.botao}>
+        <TouchableOpacity 
+        style={estilos.botao}
+        onPress={ () => {
+          navigation.navigate('PJRegister')
+        }}
+        >
           <Text style={estilos.textoBotao}>
             Pessoa Jurídica
           </Text>
@@ -72,3 +77,4 @@ const estilos = StyleSheet.create({
     color: '#E6E6E6',
   },
 });
+
