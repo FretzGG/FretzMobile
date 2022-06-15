@@ -18,17 +18,21 @@ export default function UserHeader(props) {
         <UserIcon userType={user_types[type]}/>
       </TouchableOpacity>
       <View style={styles.user_info_view}>
-        <Text style={styles.user_name}>Guguinha dos Santos</Text>
+        <Text style={styles.user_name}>Guguinha Martins</Text>
         <View style={styles.user_rating_view}>
-          <View style={styles.user_rating_star}>
-            <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
-          </View>
-          <Text style={styles.user_rating}> 4.87</Text>
+          {type === 2 && (
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.user_rating_star}>
+                <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
+              </View>
+              <Text style={styles.user_rating}> 4.87</Text>
+            </View>
+          )}
         </View>
       </View>
       <View style={styles.chat_view}>
         <TouchableOpacity onPress={() => {alert('Chat')}}>
-          <ChatIcon unreadNo={2} />
+          <ChatIcon unreadNo={type} />
         </TouchableOpacity>
       </View>
     </View>
