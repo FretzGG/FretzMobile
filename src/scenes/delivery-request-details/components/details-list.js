@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { faAngleDown, faAngleUp, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { List } from "react-native-paper";
 import PackagePhotos from "./package-photos";
 
 export default function DetailsList() {
+  const [attachmentExpanded, setAttachmentExpanded] = useState(false);
   const [unseenInterests, setUnseenInterests] = useState(0);
+
+  const attachments = [{
+    title: 'Dimensões da carga',
+    description: 'Desenho com dimensões da caixa'
+  }, {
+    title: 'Nota Fiscal',
+    description: ''
+  }];
 
   return (
     <ScrollView style={styles.container}>
@@ -42,25 +52,44 @@ export default function DetailsList() {
           </Text>
         </View>
       </View>
-      <View style={styles.attachment_row}>
-        <Text style={styles.section_title}>Anexos</Text>
-        <View style={{flexDirection: 'row'}}>
-          <View style={{flex: 5}}>
-            <Text style={styles.attachment_text}>
-              Clique para exibir mais 2 arquivos com informações sobre a carga
-            </Text>
-          </View>
-          <TouchableOpacity onPress={() => {alert('Anexos')}} style={{flex: 1}}>
-            <View style={{marginTop: 5, marginLeft: 20}}>
-              <FontAwesomeIcon 
-                icon={faAngleDown}
-                color={'#DEB841'}
-                size={30}
-              />
-            </View>
+      <List.Accordion
+        style={styles.attachment_list_header}
+        title={'Anexos'}
+        titleStyle={styles.section_title}
+        description={
+          attachments.length === 0 ?
+          'Sem arquivos'
+          : attachments.length === 1 ?
+          'Clique para exibir um arquivo com mais informações sobre a carga'
+          : 'Clique para exibir mais ' + attachments.length + ' arquivos com informações sobre a carga'
+        }
+        descriptionStyle={styles.text}
+        expanded={attachmentExpanded}
+        onPress={() => setAttachmentExpanded(!attachmentExpanded)}
+        right={() => 
+          <FontAwesomeIcon 
+            icon={attachmentExpanded ? faAngleUp : faAngleDown}
+            color={'#DEB841'}
+            size={30}
+          />
+        }
+      >
+        {attachments.map((attachment, index) => (
+          <TouchableOpacity style={styles.attachment_button} key={index}>
+            <List.Item 
+              title={attachment.title}
+              titleStyle={styles.text}
+              description={attachment.description}
+              descriptionStyle={styles.attachment_description}
+              left={() => 
+                <View style={{marginStart: 10, marginTop: 19}}>
+                  <FontAwesomeIcon icon={faCircle} size={7} color={'#DEB841'}/>
+                </View>
+              }
+            />
           </TouchableOpacity>
-        </View>
-      </View>
+        ))}
+      </List.Accordion>
       <View style={styles.price_row}>
         <Text style={styles.price_title}>Preço desejado</Text>
         <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ 500,00</Text>
@@ -124,19 +153,26 @@ const styles = StyleSheet.create({
     textAlign: 'justify',
     marginTop: 5
   },
-  attachment_text: {
-    color: '#E6E6E6',
-    marginTop: 5
+  attachment_list_header: {
+    backgroundColor: '#37323E',
+    height: 70,
+    paddingTop: -5
   },
-  attachment_row: {
-    flex: 1,
-    marginLeft: 15,
-    marginRight: 15,
+  attachment_button:{
+    marginTop: -15,
+    marginBottom: -10
+  },
+  attachment_description:{
+    color: '#6D6A75',
+    fontSize: 10,
+    marginLeft: 10,
+    marginTop: 3,
+    textAlign: 'justify'
   },
   price_row: {
     flex: 3,
     alignItems: 'center',
-    marginTop: 30
+    marginVertical: 30
   },
   price_title: {
     color: '#DEB841',
