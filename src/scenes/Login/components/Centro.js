@@ -18,7 +18,12 @@ export default function Topo() {
       autoCapitalize="none"
       style={estilos.entrada}
     />
-    <TouchableOpacity style={estilos.botao}>
+    <TouchableOpacity 
+      style={estilos.botao}
+      onPress={() => navigation.navigate('AppNavigator', {
+        screen: 'Home'
+      })}
+    >
       <Text style={estilos.textoBotao}>
         Login
       </Text>

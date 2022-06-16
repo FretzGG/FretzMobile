@@ -1,14 +1,9 @@
 import React from "react";
-import { SafeAreaView, View } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
-
-import LoginRegister from './navigators/LoginRegister'
+import RootNavigator from "./navigators/root-navigator";
 
 export default function App() {
   return (
-    <NavigationContainer style={{ flex: 1 }}>
-      <LoginRegister />
-    </NavigationContainer>
+    <RootNavigator />
   );
 }
