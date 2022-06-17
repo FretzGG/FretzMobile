@@ -9,7 +9,12 @@ export default function UserHeader(props) {
   return (
     <View style={[styles.container, {flex: props.flex_size}]}>
       <View style={styles.user_icon_view}>
-        <UserIcon userType={props.userType}/>
+        {props.userType == 'Motorista' ?
+          <TouchableOpacity onPress={() => alert('Avaliação do motorista')}>
+            <UserIcon userType={props.userType}/>
+          </TouchableOpacity>
+        : <UserIcon userType={props.userType}/>
+        }
       </View>
       <View style={styles.user_info_view}>
         <Text style={styles.user_name}>Guguinha Martins</Text>
