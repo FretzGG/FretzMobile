@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../../../navigators/app-navigator";
 
 export default function RequestList(){
   const navigation = useNavigation();
+  const user = useContext(UserContext);
 
   const [requests, setRequests] = useState([
     {id: 1, title: 'Requisição 1'},
@@ -45,19 +47,26 @@ export default function RequestList(){
             color={'#DEB841'}
             size={30}
           />
-          <Text style={styles.request_header_text}>   Minhas Requisições</Text>
+          <Text style={styles.request_header_text}>   {
+            user.type !== 'Motorista' ?
+             'Minhas Requisições' 
+             : 'Meus Fretes'
+             } 
+          </Text>
         </View>
-        <TouchableOpacity onPress={() => 
-          navigation.navigate('Delivery Request Form', {
-            title: 'Novo Frete'
-          })} 
-          style={styles.request_header_add_view}>
-            <FontAwesomeIcon 
-              icon={faPlus}
-              color={'#DEB841'}
-              size={30}
-          />
-        </TouchableOpacity>
+        {user.type !== 'Motorista' && 
+          <TouchableOpacity onPress={() => 
+            navigation.navigate('Delivery Request Form', {
+              title: 'Novo Frete'
+            })} 
+            style={styles.request_header_add_view}>
+              <FontAwesomeIcon 
+                icon={faPlus}
+                color={'#DEB841'}
+                size={30}
+            />
+          </TouchableOpacity>
+        }
       </View>
       <View style={styles.list}>
         <FlatList
