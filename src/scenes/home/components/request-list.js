@@ -78,7 +78,12 @@ export default function RequestList(){
           )}
         />
       </View>
-      {user.type === 'Motorista' && <LargeButton title={'Procurar FRETZ'} onPress={() => alert('teste')} />}
+      {user.type === 'Motorista' &&
+        <LargeButton 
+          title={'Procurar FRETZ'} 
+          onPress={() => alert('teste')} 
+        />
+      }
     </View>
   );
 }
