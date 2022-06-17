@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -6,21 +6,15 @@ import UserIcon from "./user-icon";
 import ChatIcon from "./chat-icon";
 
 export default function UserHeader(props) {
-  const [type, setType] = useState(0);
-
-  const user_types = ['ClientePF', 'ClientePJ', 'Motorista']
-
   return (
     <View style={[styles.container, {flex: props.flex_size}]}>
-      <TouchableOpacity onPress={() => {
-        setType((type+1)%3);
-      }} style={styles.user_icon_view}>
-        <UserIcon userType={user_types[type]}/>
-      </TouchableOpacity>
+      <View style={styles.user_icon_view}>
+        <UserIcon userType={props.userType}/>
+      </View>
       <View style={styles.user_info_view}>
         <Text style={styles.user_name}>Guguinha Martins</Text>
         <View style={styles.user_rating_view}>
-          {type === 2 && (
+          {props.userType === 'Motorista' && (
             <View style={{flexDirection: 'row'}}>
               <View style={styles.user_rating_star}>
                 <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
@@ -32,7 +26,7 @@ export default function UserHeader(props) {
       </View>
       <View style={styles.chat_view}>
         <TouchableOpacity onPress={() => {alert('Chat')}}>
-          <ChatIcon unreadNo={type} />
+          <ChatIcon unreadNo={2} />
         </TouchableOpacity>
       </View>
     </View>
