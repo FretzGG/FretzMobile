@@ -9,8 +9,8 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <UserHeader userType={user.type} flex_size={1}/>
-      <RequestList flex_size={5}/>
+      <UserHeader />
+      <RequestList />
     </View>
   );
 }

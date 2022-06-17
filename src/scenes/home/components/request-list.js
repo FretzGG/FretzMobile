@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function RequestList(props){
+export default function RequestList(){
   const navigation = useNavigation();
 
   const [requests, setRequests] = useState([
@@ -37,7 +37,7 @@ export default function RequestList(props){
   );
   
   return (
-    <View style={{flex: props.flex_size}}>
+    <View style={{flex: 5}}>
       <View style={styles.header}>
         <View style={styles.request_header_title_view}>
           <FontAwesomeIcon 
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     flex: 7
   },
   item_box: {
-    
     borderBottomWidth: 1,
     borderBottomColor: '#E6E6E6'
   },
