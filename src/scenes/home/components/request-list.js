@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
+import LargeButton from "../../../components/large-button";
 
 export default function RequestList(){
   const navigation = useNavigation();
@@ -77,6 +78,7 @@ export default function RequestList(){
           )}
         />
       </View>
+      {user.type === 'Motorista' && <LargeButton title={'Procurar FRETZ'} onPress={() => alert('teste')} />}
     </View>
   );
 }
