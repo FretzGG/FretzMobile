@@ -13,23 +13,15 @@ export default function UserIcon(props) {
           size={60} 
         />
       </View>
-      {props.userType === 'ClientePJ' && 
+      {props.userType !== 'ClientePF' && 
         <View style={styles.user_type_circle}>
           <FontAwesomeIcon 
-            icon={faIndustry}
+            icon={props.userType === 'ClientePJ' ? faIndustry : faTruckFast}
             color={'#DEB841'}
             size={30}
           />
         </View>
       }
-      {props.userType === 'Motorista' && 
-        <View style={styles.user_type_circle}>
-          <FontAwesomeIcon
-            icon={faTruckFast}
-            color={'#DEB841'}
-            size={30}
-          />
-        </View>}
     </View>
   );
 }
