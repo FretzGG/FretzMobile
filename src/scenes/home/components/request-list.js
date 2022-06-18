@@ -1,29 +1,33 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../../../navigators/app-navigator";
+import LargeButton from "../../../components/large-button";
 
-export default function RequestList(props){
+export default function RequestList(){
   const navigation = useNavigation();
+  const user = useContext(UserContext);
 
   const [requests, setRequests] = useState([
     {id: 1, title: 'Requisição 1'},
     {id: 2, title: 'Requisição 2'},
     {id: 3, title: 'Requisição 3'}])
 
-  const Item = ({title}) => (
+  const Item = (props) => (
     <View style={styles.item_box}>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Delivery Request Details', {
-            title: title
+            title: props.item.title,
+            status: user.type === 'Motorista' ? 'Em progresso' : 'Ativo'
           });
         }} 
         style={styles.item_view}
       >
         <Text style={styles.item_text}>
-          {title}
+          {props.item.title}
         </Text>
         <View style={styles.item_arrow}>
           <FontAwesomeIcon 
@@ -37,7 +41,7 @@ export default function RequestList(props){
   );
   
   return (
-    <View style={{flex: props.flex_size}}>
+    <View style={{flex: 5}}>
       <View style={styles.header}>
         <View style={styles.request_header_title_view}>
           <FontAwesomeIcon 
@@ -45,29 +49,42 @@ export default function RequestList(props){
             color={'#DEB841'}
             size={30}
           />
-          <Text style={styles.request_header_text}>   Minhas Requisições</Text>
+          <Text style={styles.request_header_text}>   {
+            user.type !== 'Motorista' ?
+             'Minhas Requisições' 
+             : 'Meus Fretes'
+             } 
+          </Text>
         </View>
-        <TouchableOpacity onPress={() => 
-          navigation.navigate('Delivery Request Form', {
-            title: 'Novo Frete'
-          })} 
-          style={styles.request_header_add_view}>
-            <FontAwesomeIcon 
-              icon={faPlus}
-              color={'#DEB841'}
-              size={30}
-          />
-        </TouchableOpacity>
+        {user.type !== 'Motorista' && 
+          <TouchableOpacity onPress={() => 
+            navigation.navigate('Delivery Request Form', {
+              title: 'Novo Frete'
+            })} 
+            style={styles.request_header_add_view}>
+              <FontAwesomeIcon 
+                icon={faPlus}
+                color={'#DEB841'}
+                size={30}
+            />
+          </TouchableOpacity>
+        }
       </View>
       <View style={styles.list}>
         <FlatList
           data={requests}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <Item title={item.title} />
+            <Item item={item} />
           )}
         />
       </View>
+      {user.type === 'Motorista' &&
+        <LargeButton 
+          title={'Procurar FRETZ'} 
+          onPress={() => navigation.navigate('Delivery Search')} 
+        />
+      }
     </View>
   );
 }
@@ -98,7 +115,6 @@ const styles = StyleSheet.create({
     flex: 7
   },
   item_box: {
-    
     borderBottomWidth: 1,
     borderBottomColor: '#E6E6E6'
   },

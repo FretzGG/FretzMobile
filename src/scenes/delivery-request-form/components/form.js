@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
 import DocumentPicker, { types } from 'react-native-document-picker'
+import LargeButton from "../../../components/large-button";
 
 export default function Form(props) {
   const navigation = useNavigation();
@@ -100,19 +101,13 @@ export default function Form(props) {
         />
         <Text style={{color: '#E6E6E6', marginTop: -10}}>Toque para alterar valor</Text>
       </View>
-      <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity 
-          style={styles.form_submit_button}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.form_submit_text}>
-            {props.title === 'Novo Frete' ?
-              'Criar' : 
-              'Salvar'
-            }
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <LargeButton 
+        title={props.title === 'Novo Frete' ?
+          'Criar' 
+          : 'Salvar'
+        }
+        onPress={() => navigation.goBack()}
+      />
     </ScrollView>
   );
 }
