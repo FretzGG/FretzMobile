@@ -1,6 +1,5 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import LargeButton from "../../components/large-button";
 import RequestItem from "./components/request-item";
 
 export default function DeliverySearch() {
@@ -21,10 +20,6 @@ export default function DeliverySearch() {
           )}
         />
       </View>
-      <LargeButton 
-        title={'Fazer oferta'}
-        onPress={() => alert('Go to Request')}
-      />
     </View>
   );
 }

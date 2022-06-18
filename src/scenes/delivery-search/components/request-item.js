@@ -4,6 +4,7 @@ import { List } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import ProfilePhoto from "./profile-photo";
+import LargeButton from "../../../components/large-button";
 
 export default function RequestItem(props) {
   const [expanded, setExpanded] = useState(false);
@@ -53,6 +54,10 @@ export default function RequestItem(props) {
             <Text style={styles.info}>{props.request.distance} KM</Text>
           </View>
         </View>
+        <LargeButton 
+          title={'Fazer oferta'}
+          onPress={() => alert('Go to Request')}
+        />
       </View>
     </List.Accordion>
   );
