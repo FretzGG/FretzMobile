@@ -3,10 +3,13 @@ import { StyleSheet, Text, View } from "react-native";
 import { List } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { useNavigation } from "@react-navigation/native";
 import ProfilePhoto from "./profile-photo";
 import LargeButton from "../../../components/large-button";
 
 export default function RequestItem(props) {
+  const navigation = useNavigation();
+
   const [expanded, setExpanded] = useState(false);
   
   return (
@@ -56,7 +59,9 @@ export default function RequestItem(props) {
         </View>
         <LargeButton 
           title={'Fazer oferta'}
-          onPress={() => alert('Go to Request')}
+          onPress={() => navigation.navigate('Delivery Request Details', {
+            title: props.request.title
+          })}
         />
       </View>
     </List.Accordion>
