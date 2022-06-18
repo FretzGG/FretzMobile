@@ -1,6 +1,7 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import LargeButton from "../../components/large-button";
+import RequestItem from "./components/request-item";
 
 export default function DeliverySearch() {
   const requests = [
@@ -12,7 +13,13 @@ export default function DeliverySearch() {
   return (
     <View style={styles.container}>
       <View style={styles.list_view}>
-        
+        <FlatList
+          data={requests}
+          keyExtractor={item => item.id}
+          renderItem={({item}) => (
+            <RequestItem request={item} />
+          )}
+        />
       </View>
       <LargeButton 
         title={'Fazer oferta'}
