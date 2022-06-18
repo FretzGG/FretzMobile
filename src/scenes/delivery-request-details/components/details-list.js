@@ -146,9 +146,11 @@ export default function DetailsList(props) {
           <LargeButton title={'Dar Lance'}/>
         </View>
         :
-        <View style={styles.price_row}>
-          <Text style={styles.price_title}>Prazo</Text>
-          <Text style={styles.price_number}>25/07/2022</Text>
+        <View style={{flex: 3}}>
+          <View style={{alignItems: 'center', marginTop: 30}}>
+            <Text style={styles.price_title}>Prazo</Text>
+            <Text style={styles.price_number}>25/07/2022</Text>
+          </View>
           <LargeButton title={'Finalizar FRETZ'}/>
         </View>
       }
