@@ -10,13 +10,15 @@ export default function RequestItem(props) {
   
   return (
     <List.Accordion
-      style={[styles.header, !expanded && {borderBottomWidth: 0.8,borderBottomColor: '#E6E6E6'}]}
-      title={props.request.sellerName}
+      style={[styles.header, !expanded && {borderBottomWidth: 0.8, borderBottomColor: '#E6E6E6'}]}
+      title={props.request.title}
       titleStyle={styles.title}
+      description={'Feita por: ' + props.request.sellerName}
+      descriptionStyle={styles.title}
       onPress={() => setExpanded(!expanded)}
       expanded={expanded}
       right={() =>
-        <View style={{marginTop: 10}}>
+        <View style={{marginTop: 0}}>
           <FontAwesomeIcon 
             icon={false ? faAngleUp : faAngleDown}
             color={'#DEB841'}
@@ -25,12 +27,33 @@ export default function RequestItem(props) {
         </View>
       }
       left={() => 
-        <View style={{marginTop: 15}} >
+        <View style={{marginLeft: 0}} >
           <ProfilePhoto size={10} />
         </View>
       }
     >
-      <Text style={ expanded && {borderBottomWidth: 0.8, borderBottomColor: '#E6E6E6'}}>Teste</Text>
+      <View style={ expanded && {borderBottomWidth: 1.2, borderBottomColor: '#E6E6E6', marginLeft: -70}}>
+        <View style={styles.info_grid}>
+          <View style={styles.info_view}>
+            <Text style={styles.info_title}>Lance Inicial</Text>
+            <Text style={styles.info}>R$ {props.request.initialBet},00</Text>
+          </View>
+          <View style={styles.info_view}>
+            <Text style={styles.info_title}>Prazo Desejado</Text>
+            <Text style={styles.info}>{props.request.deadline}</Text>
+          </View>
+        </View>
+        <View style={[styles.info_grid, {marginVertical: 10}]}>
+        <View style={styles.info_view}>
+            <Text style={styles.info_title}>Tipo</Text>
+            <Text style={styles.info}>{props.request.type}</Text>
+          </View>
+          <View style={styles.info_view}>
+            <Text style={styles.info_title}>Distância</Text>
+            <Text style={styles.info}>{props.request.distance} KM</Text>
+          </View>
+        </View>
+      </View>
     </List.Accordion>
   );
 }
@@ -39,12 +62,27 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: '#37323E',
     height: 70,
-    paddingTop: -5
+    paddingTop: 5
   },
   title:{
     color: '#E6E6E6',
     textAlign: 'justify',
-    marginTop: 15,
+    marginTop: 0,
     marginLeft: 10
+  },
+  info_grid: {
+    flexDirection: 'row',
+    justifyContent:'space-around'
+  },
+  info_view: {
+    justifyContent:'center',
+    alignItems: 'center'
+  },
+  info_title: {
+    color: '#DEB841',
+    fontWeight: 'bold'
+  },
+  info: {
+    color: '#E6E6E6'
   }
 });
