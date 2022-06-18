@@ -1,14 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import DetailsList from "./components/details-list";
+import { UserContext } from "../../navigators/app-navigator";
 
 export default function DeliveryRequestDetails(props) {
   const navigation = useNavigation();
 
+  const user = useContext(UserContext);
+
   useEffect(() => {
+    if (user.type !== 'Motorista') {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity 
@@ -25,9 +29,9 @@ export default function DeliveryRequestDetails(props) {
         </TouchableOpacity>
       )
     })
-  });
+  }});
 
   return (
-    <DetailsList/>
+    <DetailsList status={props.route.params.status}/>
   );
 }

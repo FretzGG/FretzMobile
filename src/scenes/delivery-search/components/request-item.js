@@ -36,7 +36,7 @@ export default function RequestItem(props) {
         </View>
       }
     >
-      <View style={ expanded && {borderBottomWidth: 1.2, borderBottomColor: '#E6E6E6', marginLeft: -70}}>
+      <View style={ expanded && {borderBottomWidth: 1.2, borderBottomColor: '#E6E6E6', marginLeft: -70, marginTop: 10}}>
         <View style={styles.info_grid}>
           <View style={styles.info_view}>
             <Text style={styles.info_title}>Lance Inicial</Text>
@@ -60,7 +60,8 @@ export default function RequestItem(props) {
         <LargeButton 
           title={'Fazer oferta'}
           onPress={() => navigation.navigate('Delivery Request Details', {
-            title: props.request.title
+            title: props.request.title,
+            status: 'Ativo'
           })}
         />
       </View>

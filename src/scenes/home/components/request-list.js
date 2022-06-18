@@ -15,18 +15,19 @@ export default function RequestList(){
     {id: 2, title: 'Requisição 2'},
     {id: 3, title: 'Requisição 3'}])
 
-  const Item = ({title}) => (
+  const Item = (props) => (
     <View style={styles.item_box}>
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('Delivery Request Details', {
-            title: title
+            title: props.item.title,
+            status: user.type === 'Motorista' ? 'Em progresso' : 'Ativo'
           });
         }} 
         style={styles.item_view}
       >
         <Text style={styles.item_text}>
-          {title}
+          {props.item.title}
         </Text>
         <View style={styles.item_arrow}>
           <FontAwesomeIcon 
@@ -74,7 +75,7 @@ export default function RequestList(){
           data={requests}
           keyExtractor={item => item.id}
           renderItem={({item}) => (
-            <Item title={item.title} />
+            <Item item={item} />
           )}
         />
       </View>

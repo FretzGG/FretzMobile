@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { List } from "react-native-paper";
+import MaskInput, { Masks } from "react-native-mask-input";
+import { UserContext } from "../../../navigators/app-navigator";
 import PackagePhotos from "./package-photos";
+import LargeButton from "../../../components/large-button";
 
-export default function DetailsList() {
+export default function DetailsList(props) {
   const [attachmentExpanded, setAttachmentExpanded] = useState(false);
   const [unseenInterests, setUnseenInterests] = useState(0);
+  const [deadline, setDeadline] = useState('');
+  const [suggestedPrice, setSuggestedPrice] = useState('');
+
+  const user = useContext(UserContext);
 
   const attachments = [{
     title: 'Dimensões da carga',
@@ -30,10 +37,12 @@ export default function DetailsList() {
             <Text style={styles.section_title}>Tipo</Text>
             <Text style={[styles.type_and_deadline_text, {textDecorationLine: 'underline'}]}>Frágil</Text>
           </View>
+          { props.status === 'Ativo' &&
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Prazo</Text>
             <Text style={styles.type_and_deadline_text}>25/07/2022</Text>
           </View>
+          }
         </View>
       </View>
       <View style={styles.text_row}>
@@ -90,28 +99,59 @@ export default function DetailsList() {
           </TouchableOpacity>
         ))}
       </List.Accordion>
-      <View style={styles.price_row}>
-        <Text style={styles.price_title}>Preço desejado</Text>
-        <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ 500,00</Text>
-        <TouchableOpacity
-          style={styles.auction_button}
-          onPress={() => {
-            setUnseenInterests(0);
-            alert('Mostrar motoristas interessados');
-        }}>
-          <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
-          {unseenInterests > 0 && (
-            <View style={styles.auction_button_unseen}>
-              <Text style={{
-                color: '#E6E6E6',
-                fontWeight: 'bold',
-              }}>
-                {unseenInterests}
-              </Text>
-            </View>
-          )}
-        </TouchableOpacity>
-      </View>
+      {user.type !== 'Motorista' && props.status === 'Ativo' ?
+        <View style={styles.price_row}>
+          <Text style={styles.price_title}>Preço desejado</Text>
+          <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ 500,00</Text>
+          <TouchableOpacity
+            style={styles.auction_button}
+            onPress={() => {
+              setUnseenInterests(0);
+              alert('Mostrar motoristas interessados');
+          }}>
+            <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
+            {unseenInterests > 0 && (
+              <View style={styles.auction_button_unseen}>
+                <Text style={{
+                  color: '#E6E6E6',
+                  fontWeight: 'bold',
+                }}>
+                  {unseenInterests}
+                </Text>
+              </View>
+            )}
+          </TouchableOpacity>
+        </View>
+        : props.status === 'Ativo' ?
+        <View>
+          <Text style={styles.input_title}>Preço</Text>
+          <MaskInput
+            style={styles.text_input}
+            mask={Masks.BRL_CURRENCY}
+            keyboardType={'numeric'}
+            placeholder={'R$ 0,00'}
+            placeholderTextColor={'#37323E'}
+            value={suggestedPrice}
+            onChangeText={setSuggestedPrice}
+          />
+          <Text style={styles.input_title}>Prazo de entrega</Text>
+          <MaskInput
+            style={styles.text_input}
+            mask={Masks.DATE_DDMMYYYY}
+            keyboardType={'numeric'}
+            value={deadline}
+            onChangeText={setDeadline}
+            placeholderTextColor={'#37323E'}
+          />
+          <LargeButton title={'Dar Lance'}/>
+        </View>
+        :
+        <View style={styles.price_row}>
+          <Text style={styles.price_title}>Prazo</Text>
+          <Text style={styles.price_number}>25/07/2022</Text>
+          <LargeButton title={'Finalizar FRETZ'}/>
+        </View>
+      }
     </ScrollView>
   );
 }
@@ -203,5 +243,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#E15252',
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  input_title: {
+    color: '#DEB841',
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginLeft: 15
+  },
+  text_input: {
+    backgroundColor: '#E6E6E6',
+    color: '#37323E',
+    marginTop: 10,
+    borderRadius: 30,
+    width: "92%",
+    height: 44,
+    paddingHorizontal: 20,
+    marginLeft: 15
+  },
 });
