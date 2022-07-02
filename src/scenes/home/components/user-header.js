@@ -50,7 +50,8 @@ const styles = StyleSheet.create({
   user_icon_view: {
     flex:2,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    marginLeft: 10
   },
   user_info_view:{
     flex:3,
