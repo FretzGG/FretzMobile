@@ -12,7 +12,7 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   const user_types = ['ClientePF', 'ClientePJ', 'Motorista'];
   const [user, setUser] = useState({
-    type: user_types[2]
+    type: user_types[1]
   });
 
   return (
@@ -35,7 +35,9 @@ export default function AppNavigator() {
         <Stack.Screen 
           name='Delivery Search'
           component={DeliverySearch}
-          options={{ title: 'FRETZ' }}
+          options={({route}) => ({
+            title: route.params.title, 
+          })}
         />
         <Stack.Screen
           name='Delivery Request Details'

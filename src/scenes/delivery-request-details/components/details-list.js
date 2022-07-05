@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp, faCircle } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +10,8 @@ import PackagePhotos from "./package-photos";
 import LargeButton from "../../../components/large-button";
 
 export default function DetailsList(props) {
+  const navigation = useNavigation();
+
   const [attachmentExpanded, setAttachmentExpanded] = useState(false);
   const [unseenInterests, setUnseenInterests] = useState(0);
   const [deadline, setDeadline] = useState('');
@@ -107,7 +110,9 @@ export default function DetailsList(props) {
             style={styles.auction_button}
             onPress={() => {
               setUnseenInterests(0);
-              alert('Mostrar motoristas interessados');
+              navigation.navigate('Delivery Search', {
+                title: 'Ofertas'
+              })
           }}>
             <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
             {unseenInterests > 0 && (
