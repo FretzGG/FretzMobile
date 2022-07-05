@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, StyleSheet, View, Text } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
 import OfferItem from "./components/offer-item";
 import RequestItem from "./components/request-item";
 
