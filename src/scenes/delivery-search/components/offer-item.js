@@ -54,7 +54,7 @@ export default function RequestItem(props) {
         </View>
         <LargeButton 
           title={'Fazer oferta'}
-          onPress={() => alert('Aceitar esta oferta')}
+          onPress={() => alert('Aceitar esta oferta\nMudar status desta requisição!')}
         />
       </View>
     </List.Accordion>
