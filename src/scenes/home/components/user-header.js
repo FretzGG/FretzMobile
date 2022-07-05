@@ -5,15 +5,18 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import UserIcon from "./user-icon";
 import ChatIcon from "./chat-icon";
+import { useNavigation } from "@react-navigation/native";
 
 export default function UserHeader() {
+  const navigation = useNavigation();
+
   const user = useContext(UserContext);
 
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
         {user.type == 'Motorista' ?
-          <TouchableOpacity onPress={() => alert('Avaliação do motorista')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')}>
             <UserIcon userType={user.type}/>
           </TouchableOpacity>
         : <UserIcon userType={user.type}/>

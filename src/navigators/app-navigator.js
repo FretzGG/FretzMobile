@@ -4,6 +4,7 @@ import HomeScreen from "../scenes/home";
 import DeliverySearch from "../scenes/delivery-search";
 import DeliveryRequestDetails from "../scenes/delivery-request-details";
 import DeliveryRequestForm from "../scenes/delivery-request-form";
+import DriverProfile from "../scenes/driver-profile";
 
 export const UserContext = createContext();
 
@@ -12,7 +13,7 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   const user_types = ['ClientePF', 'ClientePJ', 'Motorista'];
   const [user, setUser] = useState({
-    type: user_types[1]
+    type: user_types[2]
   });
 
   return (
@@ -52,6 +53,11 @@ export default function AppNavigator() {
           options={({route}) => ({
             title: route.params.title,
           })}
+        />
+        <Stack.Screen
+          name='Driver Profile'
+          component={DriverProfile}
+          options={{header: () => null}} 
         />
       </Stack.Navigator>
     </UserContext.Provider>
