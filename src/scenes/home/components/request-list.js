@@ -82,7 +82,9 @@ export default function RequestList(){
       {user.type === 'Motorista' &&
         <LargeButton 
           title={'Procurar FRETZ'} 
-          onPress={() => navigation.navigate('Delivery Search')} 
+          onPress={() => navigation.navigate('Delivery Search', {
+            title: 'FRETZ'
+          })} 
         />
       }
     </View>
