@@ -109,6 +109,7 @@ export default function DetailsList(props) {
           <TouchableOpacity
             style={styles.auction_button}
             onPress={() => {
+              setUnseenInterests(0);
               navigation.navigate('Delivery Search', {
                 title: 'Ofertas'
               })
