@@ -11,9 +11,9 @@ export default function DeliverySearch(props) {
   ];
 
   const offers = [
-    {id: 1, driverName:'Guguinha Santos', bet: 500, deadline: '25/07/2022'},
-    {id: 2, driverName:'Guguinha Souza', bet: 400, deadline: '21/07/2022'},
-    {id: 3, driverName:'Guguinha Silva', bet: 300, deadline: '22/07/2022'}
+    {id: 1, driverName:'Guguinha Santos', bet: 500, deadline: '25/07/2022', rating: 4.87},
+    {id: 2, driverName:'Guguinha Souza', bet: 400, deadline: '21/07/2022', rating: 4.43},
+    {id: 3, driverName:'Guguinha Silva', bet: 300, deadline: '22/07/2022', rating: 4.95}
   ];
 
   return (
