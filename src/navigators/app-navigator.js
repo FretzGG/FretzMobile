@@ -53,7 +53,7 @@ export default function AppNavigator() {
           name='Rate Delivery'
           component={RateDelivery}
           options={{
-            title: 'Avaliar'
+            title: 'Como foi seu FRETZ?'
           }} 
         />
       </Stack.Navigator>
