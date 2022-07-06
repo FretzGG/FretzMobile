@@ -1,18 +1,20 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
+import CommentSection from "./components/comment-section";
 import RateSelection from "./components/rate-section";
 
 export default function RateDelivery() {
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <RateSelection />
-    </View>
+      <CommentSection />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#37323E'
+    backgroundColor: '#37323E',
   }
 })

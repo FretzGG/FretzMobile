@@ -12,7 +12,7 @@ export default function RateSelection() {
   }
 
   return (
-    <View style={{alignItems: 'center'}}>
+    <View style={{flex:1, alignItems: 'center'}}>
       <View style={{marginTop: 40}}>
         <ProfileIcon iconSize={65} iconColor={'#37323E'} circleRadius={100} circleColor={'#DEB841'} />
       </View>
