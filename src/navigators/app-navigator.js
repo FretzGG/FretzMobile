@@ -5,6 +5,7 @@ import DeliverySearch from "../scenes/delivery-search";
 import DeliveryRequestDetails from "../scenes/delivery-request-details";
 import DeliveryRequestForm from "../scenes/delivery-request-form";
 import DriverProfile from "../scenes/driver-profile";
+import RateDelivery from "../scenes/rate-delivery";
 
 export const UserContext = createContext();
 
@@ -58,6 +59,13 @@ export default function AppNavigator() {
           name='Driver Profile'
           component={DriverProfile}
           options={{header: () => null}} 
+        />
+        <Stack.Screen
+          name='Rate Delivery'
+          component={RateDelivery}
+          options={{
+            title: 'Avaliar'
+          }} 
         />
       </Stack.Navigator>
     </UserContext.Provider>

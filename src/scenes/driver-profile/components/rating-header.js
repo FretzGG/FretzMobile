@@ -20,9 +20,14 @@ export default function RatingHeader() {
         <Text style={styles.rating_screen_title}>Avaliações</Text>
         <Text style={styles.user_name}>Guguinha Martins</Text>
       </View>
-      <View style={[styles.center, {flex: 2}]}>
+      <TouchableOpacity // Depois voltar isso para View
+        style={[styles.center, {flex: 2}]}
+        onPress={() => {
+          navigation.navigate('Rate Delivery')
+        }}
+      >
         <ProfileIcon iconSize={60} iconColor={'#DEB841'} circleRadius={85} circleColor={'#37323E'} />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
