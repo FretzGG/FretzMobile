@@ -19,47 +19,36 @@ export default function AppNavigator() {
 
   return (
     <UserContext.Provider value={user}>
-      <Stack.Navigator screenOptions={{
-        headerTintColor: '#DEB841',
-        headerStyle: {
-          backgroundColor: '#6D6A75',
-        },
-        headerTitleStyle: {
-          color: '#E6E6E6'
-        },
-        headerTitleAlign: 'center'
-      }}>
-        <Stack.Screen 
-          name='Home'
-          component={HomeScreen}
-          options={{header: () => null}} 
-        />
-        <Stack.Screen 
-          name='Delivery Search'
-          component={DeliverySearch}
-          options={({route}) => ({
+      <Stack.Navigator 
+        screenOptions={{
+          headerTintColor: '#DEB841',
+          headerStyle: {
+            backgroundColor: '#6D6A75',
+          },
+          headerTitleStyle: {
+            color: '#E6E6E6'
+          },
+          headerTitleAlign: 'center'
+        }}
+      >
+        <Stack.Group 
+          screenOptions={{
+            header: () => null
+          }}
+        >
+          <Stack.Screen name='Home' component={HomeScreen} />
+          <Stack.Screen name='Driver Profile' component={DriverProfile} />
+        </Stack.Group>
+
+        <Stack.Group 
+          screenOptions={({route}) => ({
             title: route.params.title, 
           })}
-        />
-        <Stack.Screen
-          name='Delivery Request Details'
-          component={DeliveryRequestDetails}
-          options={({route}) => ({
-            title: route.params.title, 
-          })}
-        />
-        <Stack.Screen
-          name='Delivery Request Form'
-          component={DeliveryRequestForm}
-          options={({route}) => ({
-            title: route.params.title,
-          })}
-        />
-        <Stack.Screen
-          name='Driver Profile'
-          component={DriverProfile}
-          options={{header: () => null}} 
-        />
+        >
+          <Stack.Screen name='Delivery Search' component={DeliverySearch} />
+          <Stack.Screen name='Delivery Request Details' component={DeliveryRequestDetails} />
+          <Stack.Screen name='Delivery Request Form' component={DeliveryRequestForm} />
+        </Stack.Group>
         <Stack.Screen
           name='Rate Delivery'
           component={RateDelivery}
