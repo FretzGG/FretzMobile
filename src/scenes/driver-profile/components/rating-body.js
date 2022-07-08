@@ -48,6 +48,9 @@ export default function RatingBody() {
                 <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.oneStar}</Text>
               </View>
             </View>
+            <Text style={[styles.title, {color: '#DEB841', textDecorationLine: 'underline', fontSize: 25, textAlign: 'center', paddingTop: 10}]}>
+              Comentários
+            </Text>
           </>
         }
         data={ratings.comments}

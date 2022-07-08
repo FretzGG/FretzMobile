@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   rating_screen_title: {
-    color: '#E6E6E6',
+    color: '#DEB841',
     fontWeight: 'bold',
     fontSize: 40
   },
