@@ -16,7 +16,7 @@ export default function RatingBody() {
     comments: [
       {id: 0, userName: 'Guguinha Neves', noOfStars: 5, text: 'O frete foi excelente, a carga foi transportada sem nenhum imprevisto', date: '12/05/2022'},
       {id: 1, userName: 'Guguinha Cardoso', noOfStars: 4, text: 'O frete foi bom, mas a carga foi transportada com um pouco de atraso', date: '29/05/2022'},
-      {id: 2, userName: 'Guguinha Eguchi', noOfStars: 3, text: 'O frete foi razoável, e a carga foi transportada com um atraso considerável', date: '29/05/2022'},
+      {id: 2, userName: 'Guguinha Eguchi', noOfStars: 3, text: 'O frete foi razoável, er a carga foi transportada com um atraso considerável', date: '29/05/2022'},
       {id: 3, userName: 'Guguinha Lopes', noOfStars: 4, text: 'O frete foi bom, porém a caixa amassou um pouco', date: '30/06/2022'}
     ]
   };
