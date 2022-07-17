@@ -4,7 +4,7 @@ import { List } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp, faStar } from "@fortawesome/free-solid-svg-icons";
 import { useNavigation } from "@react-navigation/native";
-import ProfilePhoto from "./profile-photo";
+import ProfileIcon from "../../../components/profile-icon";
 import LargeButton from "../../../components/large-button";
 
 export default function RequestItem(props) {
@@ -37,7 +37,7 @@ export default function RequestItem(props) {
       }
       left={() => 
         <View style={{marginLeft: 0}} >
-          <ProfilePhoto size={10} />
+          <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
         </View>
       }
     >
