@@ -6,6 +6,7 @@ import DeliveryRequestDetails from "../scenes/delivery-request-details";
 import DeliveryRequestForm from "../scenes/delivery-request-form";
 import DriverProfile from "../scenes/driver-profile";
 import RateDelivery from "../scenes/rate-delivery";
+import ChatList from "../scenes/chat-list";
 
 export const UserContext = createContext();
 
@@ -48,6 +49,7 @@ export default function AppNavigator() {
           <Stack.Screen name='Delivery Search' component={DeliverySearch} />
           <Stack.Screen name='Delivery Request Details' component={DeliveryRequestDetails} />
           <Stack.Screen name='Delivery Request Form' component={DeliveryRequestForm} />
+          <Stack.Screen name='Chat List' component={ChatList} />
         </Stack.Group>
         <Stack.Screen
           name='Rate Delivery'

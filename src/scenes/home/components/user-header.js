@@ -36,7 +36,11 @@ export default function UserHeader() {
         </View>
       </View>
       <View style={styles.chat_view}>
-        <TouchableOpacity onPress={() => {alert('Chat')}}>
+        <TouchableOpacity onPress={() => 
+          navigation.navigate('Chat List', {
+            title: 'Chat'
+          })
+        }>
           <ChatIcon unreadNo={2} />
         </TouchableOpacity>
       </View>
