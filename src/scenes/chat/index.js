@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ProfileIcon from "../../components/profile-icon";
+import Messages from "./components/messages";
+import MessageInput from "./components/message-input";
 
 export default function Chat () {
   const navigation = useNavigation();
@@ -21,7 +23,8 @@ export default function Chat () {
 
   return (
     <View style={styles.container}>
-      <Text>Chat com fulano</Text>
+      <Messages />
+      <MessageInput />
     </View>
   );
 }
