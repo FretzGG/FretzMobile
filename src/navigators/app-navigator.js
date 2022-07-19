@@ -16,7 +16,8 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   const user_types = ['ClientePF', 'ClientePJ', 'Motorista'];
   const [user, setUser] = useState({
-    type: user_types[2]
+    type: user_types[2],
+    name: 'Guguinha Neves'
   });
 
   return (

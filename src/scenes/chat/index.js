@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import ProfileIcon from "../../components/profile-icon";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
@@ -21,6 +21,7 @@ export default function Chat () {
     })
   })
 
+  // TODO: Arrumar o view de quando o teclado esta aberto
   return (
     <View style={styles.container}>
       <Messages />
