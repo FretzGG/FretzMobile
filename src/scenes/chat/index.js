@@ -5,7 +5,7 @@ import ProfileIcon from "../../components/profile-icon";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
 
-export default function Chat () {
+export default function Chat (props) {
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -13,7 +13,9 @@ export default function Chat () {
       headerRight: () => (
         <TouchableOpacity 
           onPress={() => {
-            alert('Mostrar informações do FRETZ');
+            navigation.navigate('Delivery Request Details', {
+              title: props.route.params.title
+            })
           }}>
             <ProfileIcon iconSize={30} iconColor={'#DEB841'} circleRadius={40} circleColor={'#37323E'} />
         </TouchableOpacity>
