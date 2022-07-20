@@ -2,20 +2,13 @@ import React, { useContext } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { UserContext } from "../../../navigators/app-navigator";
 
-export default function Messages () {
+export default function Messages (props) {
   const user = useContext(UserContext);
-
-  const messages = [
-    {id: 0, userName: 'Guguinha Martins', content: 'Oi!'},
-    {id: 1, userName: 'Guguinha Neves', content: 'Olá!'},
-    {id: 2, userName: 'Guguinha Martins', content: 'A entrega chegará no prazo?'},
-    {id: 3, userName: 'Guguinha Neves', content: 'Sim, ela chegará no prazo acordado.'},
-  ];
 
   return (
     <View style={styles.container}>
       <FlatList 
-        data={messages}
+        data={props.messages}
         keyExtractor={item => item.id}
         renderItem={({item}) => 
           <View style={[styles.message_box, {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 import LargeButton from "../../../components/large-button";
 
-export default function MessageInput () {
+export default function MessageInput (props) {
   const [message, setMessage] = useState('');
 
   return (
@@ -20,7 +20,7 @@ export default function MessageInput () {
       </View>
       <LargeButton 
         title={'Enviar'}
-        onPress={() => {alert('Enviar mensagem')}}
+        onPress={() => props.writeMessage(message)}
       />
     </View>
   );
