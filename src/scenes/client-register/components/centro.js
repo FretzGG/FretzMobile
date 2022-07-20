@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
-export default function Topo() {
+export default function Centro() {
   const navigation = useNavigation();
 
   return (
@@ -13,19 +13,21 @@ export default function Topo() {
       <View style = {estilos.downContainer}>
         <TouchableOpacity style={estilos.botao}
         onPress={ () => {
-          navigation.navigate('ClientRegister')
+          navigation.navigate('PFRegister')
         }}
         >
           <Text style={estilos.textoBotao}>
-            Cliente
+            Pessoa Física
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={estilos.botao}
+        <TouchableOpacity 
+        style={estilos.botao}
         onPress={ () => {
-          navigation.navigate('DriverRegister')
-        }}>
+          navigation.navigate('PJRegister')
+        }}
+        >
           <Text style={estilos.textoBotao}>
-            Motorista
+            Pessoa Jurídica
           </Text>
         </TouchableOpacity>
       </View>

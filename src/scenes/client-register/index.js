@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import Topo from '../../components/Topo';
-import Centro from './components/Centro';
+import Centro from './components/centro';
 
-export default function PJRegister () {
+export default function ClientRegister () {
   return (
     <View style = {estilos.container}>
       <Topo />
@@ -18,4 +18,4 @@ const estilos = StyleSheet.create({
     flex: 1,
     backgroundColor: '#37323E',
   },
-});
+}); 

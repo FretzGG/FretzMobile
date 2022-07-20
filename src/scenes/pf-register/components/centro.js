@@ -10,7 +10,7 @@ export default function Centro() {
   const [name, setName] = useState('')
   const [cep, setCep] = useState('')
   const [address, setAddress] = useState('')
-  const [cnpj, setCnpj] = useState('')
+  const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [telnumber, setTelnumber] = useState('')
 
@@ -20,9 +20,9 @@ export default function Centro() {
         <Text style={estilos.fonteCadastro}>CADASTRO</Text>
       </View>
       <View style={estilos.downContainer}>
-        <Text style={estilos.fonte}>Dados da Empresa</Text>
+        <Text style={estilos.fonte}>Dados do Cliente</Text>
         <TextInput
-          placeholder="Insira o nome da empresa"
+          placeholder="Insira seu nome"
           autoCapitalize="none"
           style={estilos.entrada}
           value={name}
@@ -46,12 +46,12 @@ export default function Centro() {
         />
         <MaskInput
           style={estilos.entrada}
-          mask={Masks.BRL_CNPJ}
-          placeholder="Insira CNPJ"
+          mask={Masks.BRL_CPF}
+          placeholder="Insira CPF"
           placeholderTextColor={'#37323E'}
           keyboardType={'numeric'}
-          value={cnpj}
-          onChangeText={setCnpj}
+          value={cpf}
+          onChangeText={setCpf}
         />
         <TextInput
           placeholder="Insira e-mail"
