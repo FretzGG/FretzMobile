@@ -16,8 +16,13 @@ export default function ChatItem (props) {
           title: 'Pedido #' + props.chat.deliveryID
         })}
       >
-        <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
-        <Text style={{color: '#E6E6E6'}} >Pedido #{props.chat.deliveryID}</Text>
+        <View style={{flexDirection: 'row'}}>
+          <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
+          <View style={{justifyContent: 'center',  marginLeft: 10}}>
+            <Text style={{color: '#E6E6E6', fontWeight: 'bold'}} >Pedido #{props.chat.deliveryID}</Text>
+            <Text style={{color: '#E6E6E6', fontSize: 10}} >{props.chat.clientName}</Text>
+          </View>
+        </View>
         <FontAwesomeIcon 
           icon={faAngleRight}
           color={'#E6E6E6'}
@@ -38,6 +43,7 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     height: 50,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    width: '100%'
   }
 }

@@ -4,9 +4,9 @@ import ChatItem from "./components/chat-item";
 
 export default function ChatList () {
   const chats = [
-    {id: 0, deliveryID: 1234},
-    {id: 1, deliveryID: 4567},
-    {id: 2, deliveryID: 6910}
+    {id: 0, clientName: 'Guguinha Martins', deliveryID: 1234},
+    {id: 1, clientName: 'Guguinha Lopes', deliveryID: 4567},
+    {id: 2, clientName: 'Guguinha Cardoso', deliveryID: 6910}
   ];
 
   return (
