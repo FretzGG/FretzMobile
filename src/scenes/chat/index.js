@@ -1,12 +1,11 @@
 import React, { useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import ProfileIcon from "../../components/profile-icon";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faInfo } from "@fortawesome/free-solid-svg-icons";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
 import { UserContext } from "../../navigators/app-navigator";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 export default function Chat (props) {
   const user = useContext(UserContext);
@@ -28,13 +27,14 @@ export default function Chat (props) {
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <TouchableOpacity 
+        <TouchableOpacity
+          style={styles.info_circle}
           onPress={() => {
             navigation.navigate('Delivery Request Details', {
               title: props.route.params.title
             })
           }}>
-            <FontAwesomeIcon icon={faCircleInfo} color={'#DEB841'} size={40}/>
+            <FontAwesomeIcon icon={faInfo} color={'#DEB841'} size={25}/>
         </TouchableOpacity>
       )
     })
@@ -53,5 +53,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#37323E'
+  },
+  info_circle: {
+    borderRadius: 20,
+    backgroundColor: '#37323E',
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems:'center'
   }
 })
