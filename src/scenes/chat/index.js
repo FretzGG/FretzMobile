@@ -5,6 +5,8 @@ import ProfileIcon from "../../components/profile-icon";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
 import { UserContext } from "../../navigators/app-navigator";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 
 export default function Chat (props) {
   const user = useContext(UserContext);
@@ -32,7 +34,7 @@ export default function Chat (props) {
               title: props.route.params.title
             })
           }}>
-            <ProfileIcon iconSize={30} iconColor={'#DEB841'} circleRadius={40} circleColor={'#37323E'} />
+            <FontAwesomeIcon icon={faCircleInfo} color={'#DEB841'} size={40}/>
         </TouchableOpacity>
       )
     })
