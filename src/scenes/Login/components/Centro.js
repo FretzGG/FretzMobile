@@ -3,7 +3,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 
 
-export default function Topo() {
+export default function Centro() {
   const navigation = useNavigation();
   
   return <View style = {estilos.container}>

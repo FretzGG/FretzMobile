@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import Topo from '../../components/Topo';
-import Centro from './components/Centro';
+import Centro from './components/centro';
 
-export default function PJRegister () {
+export default function PFRegister () {
   return (
     <View style = {estilos.container}>
       <Topo />
