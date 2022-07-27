@@ -1,28 +1,35 @@
-import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
-
+import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from '../../../navigators/root-navigator';
 
 export default function Centro() {
   const navigation = useNavigation();
+  const { signIn } = useContext(AuthContext);
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   
   return <View style = {estilos.container}>
-    <Text style = {estilos.fonte}>LOG IN</Text>
+    <Text style = {estilos.fonte} >LOG IN</Text>
     <TextInput
-      placeholder="Endereço de e-mail"
+      placeholder="Nome do usuário"
       autoCapitalize="none"
+      onChangeText={setUsername}
+      value={username}
       style={estilos.entrada}
     />
     <TextInput
       placeholder="Senha"
       autoCapitalize="none"
+      secureTextEntry={true}
+      onChangeText={setPassword}
+      value={password}
       style={estilos.entrada}
     />
     <TouchableOpacity 
       style={estilos.botao}
-      onPress={() => navigation.navigate('AppNavigator', {
-        screen: 'Home'
-      })}
+      onPress={() => signIn({username, password})}
     >
       <Text style={estilos.textoBotao}>
         Login
@@ -38,11 +45,11 @@ export default function Centro() {
         Registrar
       </Text>
     </TouchableOpacity>
-    <Text onPress={ () =>
+    {/* <Text onPress={ () =>
       {alert('Esqueci a senha');}}
       style = {estilos.fonteEsqueciASenha}>
       Esqueci a senha
-    </Text> 
+    </Text>  */}
   </View>
 }
 

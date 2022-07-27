@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import UserIcon from "./user-icon";
 import ChatIcon from "./chat-icon";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../../../navigators/root-navigator";
 
 export default function UserHeader() {
   const navigation = useNavigation();
 
+  const { signOut } = useContext(AuthContext);
   const user = useContext(UserContext);
 
   return (
@@ -23,7 +25,12 @@ export default function UserHeader() {
         }
       </View>
       <View style={styles.user_info_view}>
-        <Text style={styles.user_name}>Guguinha Martins</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.user_name} >{user.name}</Text>
+          <TouchableOpacity style={{marginStart: 10}} onPress={() => signOut()} >
+            <FontAwesomeIcon icon={faSignOut} color={'#DEB841'} size={25} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.user_rating_view}>
           {user.type === 'Motorista' && (
             <View style={{flexDirection: 'row'}}>
