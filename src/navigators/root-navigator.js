@@ -12,13 +12,15 @@ export const AuthContext = createContext();
 
 export default function RootNavigator() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isLogged, setIsLogged] = useState(false);
+  const [userToken, setUserToken] = useState(null);
 
   useEffect(() => {
     const readToken = async () => {
       try {
         const token = await AsyncStorage.getItem('FRETZ_TOKEN');
-        if(token) setIsLogged(true); 
+        if(token){
+          setUserToken(token);
+        }
       }
       catch (error) {
         console.log(error)
@@ -33,7 +35,7 @@ export default function RootNavigator() {
   const storeToken = async (token) => {
     try {
       await AsyncStorage.setItem('FRETZ_TOKEN', token)
-      setIsLogged(true);
+      setUserToken(token);
     }
     catch (error) {
       console.log(error)
@@ -63,8 +65,9 @@ export default function RootNavigator() {
       })
       .catch(error => console.log(error))
     },
-    signOut: async () => { await AsyncStorage.removeItem('FRETZ_TOKEN'); setIsLogged(false) }
-  }), []);
+    signOut: async () => { await AsyncStorage.removeItem('FRETZ_TOKEN'); setUserToken(null) },
+    userToken: userToken
+  }), [userToken]);
 
   if (isLoading) {
     return <LoadingScreen />
@@ -76,7 +79,7 @@ export default function RootNavigator() {
         <Stack.Navigator screenOptions={{
           headerShown: false
         }}>
-          {isLogged ? (
+          {userToken ? (
             <Stack.Screen name="AppNavigator" component={AppNavigator} />
           ) : (
             <Stack.Screen name="LoginRegister" component={LoginRegister} />
