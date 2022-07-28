@@ -24,8 +24,10 @@ export default function RootNavigator() {
         console.log(error)
       }
     };
-    readToken();
-    setIsLoading(false);
+    readToken()
+      .then(() => {
+        setInterval(() => setIsLoading(false), 1000)
+      })
   }, []);
 
   const storeToken = async (token) => {
@@ -39,7 +41,6 @@ export default function RootNavigator() {
   };
 
   const authContext = useMemo(() => ({
-
     signIn: async (data) => {
       fetch('http://10.0.2.2:8000/auth/', {
         method: 'POST',
