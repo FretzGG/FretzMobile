@@ -26,7 +26,7 @@ export default function UserHeader() {
       </View>
       <View style={styles.user_info_view}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.user_name} >{user.name}</Text>
+          <Text style={styles.user_name} >{user.name.split(' ')[0] + ' ' + user.name.split(' ')[user.name.split(' ').length-1]}</Text>
           <TouchableOpacity style={{marginStart: 10}} onPress={() => signOut()} >
             <FontAwesomeIcon icon={faSignOut} color={'#DEB841'} size={25} />
           </TouchableOpacity>
