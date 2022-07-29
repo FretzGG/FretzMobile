@@ -18,16 +18,13 @@ export default function RootNavigator() {
   useEffect(() => {
     const readUserInfo = async () => {
       try {
-        await AsyncStorage.multiGet(['FRETZ_TOKEN', 'USER_ID'], (err, user) => {
-          if (user.token){
-            setUserToken(user.token);
-          }
-          if (user.id){
-            setuserID(id);
-          }
-          if(err != null)
-            console.log(err)
-        })
+        const [token, id] = await AsyncStorage.multiGet(['FRETZ_TOKEN', 'USER_ID'])
+        if (token[1]){
+          setUserToken(token[1]);
+        }
+        if (id[1]){
+          setuserID(id[1]);
+        }
       }
       catch (error) {
         console.log(error)
@@ -41,10 +38,9 @@ export default function RootNavigator() {
 
   const storeUserInfo = async (user) => {
     try {
-      await AsyncStorage.multiSet([['FRETZ_TOKEN', user.token], ['USER_ID', toString(user.id)]], () => {
-        setUserToken(user.token);
-        setuserID(user.id)
-      })
+      await AsyncStorage.multiSet([['FRETZ_TOKEN', user.token], ['USER_ID', user.id.toString()]])
+      setUserToken(user.token)
+      setuserID(user.id)
     }
     catch (error) {
       console.log(error)
@@ -53,7 +49,7 @@ export default function RootNavigator() {
 
   const authContext = useMemo(() => ({
     signIn: async (data) => {
-      fetch('http://10.0.2.2:8000/api/auth/', {
+      fetch('http://10.0.2.2:8000/auth/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

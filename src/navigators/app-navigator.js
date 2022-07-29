@@ -29,7 +29,7 @@ export default function AppNavigator() {
     .then(resp => resp.json())
     .then(jsonResp => setUser(jsonResp))
     .catch(error => console.log(error))
-  }, [])
+  }, [ userToken, userID ])
 
   return (
     <UserContext.Provider value={user}>
