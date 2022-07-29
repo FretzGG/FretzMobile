@@ -1,5 +1,6 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useMemo, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AuthContext } from "./root-navigator";
 import HomeScreen from "../scenes/home";
 import DeliverySearch from "../scenes/delivery-search";
 import DeliveryRequestDetails from "../scenes/delivery-request-details";
@@ -14,11 +15,21 @@ export const UserContext = createContext();
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
-  const user_types = ['ClientePF', 'ClientePJ', 'Motorista'];
-  const [user, setUser] = useState({
-    type: user_types[2],
-    name: 'Guguinha Neves'
-  });
+  const { userToken, userID } = useContext(AuthContext);
+
+  const [ user, setUser ] = useState({});
+
+  useMemo(() => {
+    fetch('http://10.0.2.2:8000/api/profile/' + userID, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${userToken}`
+      }
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setUser(jsonResp))
+    .catch(error => console.log(error))
+  }, [])
 
   return (
     <UserContext.Provider value={user}>

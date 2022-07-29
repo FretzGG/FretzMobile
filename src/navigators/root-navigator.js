@@ -13,29 +13,38 @@ export const AuthContext = createContext();
 export default function RootNavigator() {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
+  const [userID, setuserID] = useState(null);
 
   useEffect(() => {
-    const readToken = async () => {
+    const readUserInfo = async () => {
       try {
-        const token = await AsyncStorage.getItem('FRETZ_TOKEN');
-        if(token){
-          setUserToken(token);
-        }
+        await AsyncStorage.multiGet(['FRETZ_TOKEN', 'USER_ID'], (err, user) => {
+          if (user.token){
+            setUserToken(user.token);
+          }
+          if (user.id){
+            setuserID(id);
+          }
+          if(err != null)
+            console.log(err)
+        })
       }
       catch (error) {
         console.log(error)
       }
     };
-    readToken()
+    readUserInfo()
       .then(() => {
         setInterval(() => setIsLoading(false), 1000)
       })
   }, []);
 
-  const storeToken = async (token) => {
+  const storeUserInfo = async (user) => {
     try {
-      await AsyncStorage.setItem('FRETZ_TOKEN', token)
-      setUserToken(token);
+      await AsyncStorage.multiSet([['FRETZ_TOKEN', user.token], ['USER_ID', toString(user.id)]], () => {
+        setUserToken(user.token);
+        setuserID(user.id)
+      })
     }
     catch (error) {
       console.log(error)
@@ -44,7 +53,7 @@ export default function RootNavigator() {
 
   const authContext = useMemo(() => ({
     signIn: async (data) => {
-      fetch('http://10.0.2.2:8000/auth/', {
+      fetch('http://10.0.2.2:8000/api/auth/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -60,14 +69,20 @@ export default function RootNavigator() {
           alert('Nome de usuário e/ou senha erradas!')
         }
         else {
-          storeToken(jsonResp.token);
+          storeUserInfo(jsonResp)
         }
       })
       .catch(error => console.log(error))
     },
-    signOut: async () => { await AsyncStorage.removeItem('FRETZ_TOKEN'); setUserToken(null) },
-    userToken: userToken
-  }), [userToken]);
+    signOut: async () => {
+      await AsyncStorage.multiRemove(['FRETZ_TOKEN', 'USER_ID'], () => {
+        setUserToken(null);
+        setuserID(null);
+      })
+    },
+    userToken: userToken,
+    userID: userID
+  }), [userToken, userID]);
 
   if (isLoading) {
     return <LoadingScreen />
