@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -14,6 +14,16 @@ export default function UserHeader() {
   const { signOut } = useContext(AuthContext);
   const user = useContext(UserContext);
 
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (user.name){
+      const names = user.name.split(' ')
+      if (names.length > 1) setName(names[0] + ' ' + names[names.length - 1])
+      else setName(names[0])
+    }
+  }, [user.name])
+
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
@@ -26,7 +36,7 @@ export default function UserHeader() {
       </View>
       <View style={styles.user_info_view}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.user_name} >{user.name.split(' ')[0] + ' ' + user.name.split(' ')[user.name.split(' ').length-1]}</Text>
+          <Text style={styles.user_name} >{name}</Text>
           <TouchableOpacity style={{marginStart: 10}} onPress={() => signOut()} >
             <FontAwesomeIcon icon={faSignOut} color={'#DEB841'} size={25} />
           </TouchableOpacity>
