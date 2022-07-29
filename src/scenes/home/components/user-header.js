@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
+import { AuthContext } from "../../../navigators/root-navigator";
 import UserIcon from "./user-icon";
 import ChatIcon from "./chat-icon";
-import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "../../../navigators/root-navigator";
 
 export default function UserHeader() {
   const navigation = useNavigation();
@@ -17,11 +17,11 @@ export default function UserHeader() {
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
-        {user.type == 'Motorista' ?
-          <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')}>
-            <UserIcon userType={user.type}/>
+        {user.user_type == 'PT' ?
+          <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')} >
+            <UserIcon />
           </TouchableOpacity>
-        : <UserIcon userType={user.type}/>
+        : <UserIcon />
         }
       </View>
       <View style={styles.user_info_view}>
@@ -32,12 +32,12 @@ export default function UserHeader() {
           </TouchableOpacity>
         </View>
         <View style={styles.user_rating_view}>
-          {user.type === 'Motorista' && (
+          {user.user_type === 'PT' && (
             <View style={{flexDirection: 'row'}}>
               <View style={styles.user_rating_star}>
                 <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
               </View>
-              <Text style={styles.user_rating}> 4.87</Text>
+              <Text style={styles.user_rating}> {user.avg_rating.toFixed(2)}</Text>
             </View>
           )}
         </View>
