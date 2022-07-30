@@ -20,15 +20,17 @@ export default function AppNavigator() {
   const [ user, setUser ] = useState({});
 
   useMemo(() => {
-    fetch('http://10.0.2.2:8000/api/profile/' + userID, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Token ${userToken}`
-      }
-    })
-    .then(resp => resp.json())
-    .then(jsonResp => setUser(jsonResp))
-    .catch(error => console.log(error))
+    if(userID != null) {
+      fetch('http://10.0.2.2:8000/api/profile/' + userID, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${userToken}`
+        }
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setUser(jsonResp))
+      .catch(error => console.log(error))
+    }
   }, [ userToken, userID ])
 
   return (
