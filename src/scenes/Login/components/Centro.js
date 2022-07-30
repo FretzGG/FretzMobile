@@ -14,6 +14,7 @@ export default function Centro() {
     <Text style = {estilos.fonte} >LOG IN</Text>
     <TextInput
       placeholder="Nome do usuário"
+      placeholderTextColor={'#6D6A75'}
       autoCapitalize="none"
       onChangeText={setUsername}
       value={username}
@@ -21,6 +22,7 @@ export default function Centro() {
     />
     <TextInput
       placeholder="Senha"
+      placeholderTextColor={'#6D6A75'}
       autoCapitalize="none"
       secureTextEntry={true}
       onChangeText={setPassword}

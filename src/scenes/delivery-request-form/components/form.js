@@ -64,7 +64,7 @@ export default function Form(props) {
         keyboardType={'numeric'}
         value={deadline}
         onChangeText={setDeadline}
-        placeholderTextColor={'#37323E'}
+        placeholderTextColor={'#6D6A75'}
       />
       <Text style={styles.input_title}>Anexos</Text>
       <TouchableOpacity
@@ -94,7 +94,7 @@ export default function Form(props) {
           style={styles.price_number}
           mask={Masks.BRL_CURRENCY}
           placeholder={'R$ 0,00'}
-          placeholderTextColor={'#E6E6E6'}
+          placeholderTextColor={'#6D6A75'}
           keyboardType={'numeric'}
           value={suggestedPrice}
           onChangeText={setSuggestedPrice}

@@ -42,14 +42,18 @@ export default function UserHeader() {
           </TouchableOpacity>
         </View>
         <View style={styles.user_rating_view}>
-          {user.user_type === 'PT' && (
+          {user.user_type === 'PT' && 
+            user.number_of_ratings > 0 ? (
             <View style={{flexDirection: 'row'}}>
               <View style={styles.user_rating_star}>
                 <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
               </View>
               <Text style={styles.user_rating}> {user.avg_rating.toFixed(2)}</Text>
             </View>
-          )}
+            ) : (
+              <Text style={styles.user_rating}>Realize seu primeiro FRETZ !</Text>
+            )
+          }
         </View>
       </View>
       <View style={styles.chat_view}>
