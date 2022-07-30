@@ -27,7 +27,7 @@ export default function UserHeader() {
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
-        {user.user_type == 'PT' ?
+        {user.user_type === 'PT' ?
           <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')} >
             <UserIcon />
           </TouchableOpacity>
@@ -36,7 +36,7 @@ export default function UserHeader() {
       </View>
       <View style={styles.user_info_view}>
         <View style={{flexDirection: 'row'}}>
-          <Text style={styles.user_name} >{name}</Text>
+          <Text style={styles.user_name} >{ user.user_type === 'PJ' ? user.fantasy_name : name }</Text>
           <TouchableOpacity style={{marginStart: 10}} onPress={() => signOut()} >
             <FontAwesomeIcon icon={faSignOut} color={'#DEB841'} size={25} />
           </TouchableOpacity>
