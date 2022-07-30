@@ -9,30 +9,180 @@ export default function Centro() {
   const navigation = useNavigation();
 
   //valores do tipo de frete e combustível
-  const type_options = ['Simples', 'Perecível', 'Alto Valor', 'Frágil', 'Perigosa'];
-  const fuel_type_options = ['Flex', 'Disel', 'Gasolina', 'Alcool', 'Eletrico'];
-
+  const type_options = ['Selecione a Categoria', 'Simples', 'Pesado', 'Perecível', 'Alto Valor', 'Frágil', 'Perigosa'];
+  
   //dados do motorista
   const [name, setName] = useState('')
-  const [cep, setCep] = useState('')
   const [address, setAddress] = useState('')
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [telnumber, setTelnumber] = useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [repeatedPassword, setRepeatedPassword] = useState('')
 
   //dados do veiculo
-
   const [vehicleplate, setVehicleplate] = useState('')
   const [vehiclemodel, setVehiclemodel] = useState('')
   const [vehiclecategory, setVehiclecategory] = useState(type_options[0])
-  const [vehicledocument, setVehicledocument] = useState('')
-  const [vehiclerenavam, setVehiclerenavam] = useState('')
-  const [vehiclechassi, setVehiclechassi] = useState('')
-  const [vehiclefuel, setVehiclefuel] = useState(fuel_type_options[0])
-  const [vehiclelicense, setVehiclelicense] = useState('')
   const [vehiclecolor, setVehiclecolor] = useState('')
-  const [modelyear, setModelyear] = useState('')
-  const [manufactureyear, setManufactureyear] = useState('')
+
+  const createPTUser = () => {
+    fetch('http://10.0.2.2:8000/api/users/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    })
+    .then(resp => {
+      if(!resp.ok){
+        alert('Erro ao criar usuário. Tente novamente')
+        return ;
+      }
+    })
+    .then(() => {
+      fetch('http://10.0.2.2:8000/auth/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => updateProfile(jsonResp))
+      .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+  }
+
+  const updateProfile = (userInfo) => {
+    fetch('http://10.0.2.2:8000/api/profile/' + userInfo.id + '/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`
+      },
+      body: JSON.stringify({
+        user: userInfo.id,
+        name,
+        address,
+        cpf,
+        email,
+        phone_number: telnumber,
+        user_type: 'PT'
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => createVehicle(userInfo))
+    .catch(error => console.log(error))
+  }
+
+  const createVehicle = (userInfo) => {
+    fetch('http://10.0.2.2:8000/api/vehicle/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`
+      },
+      body: JSON.stringify({
+        user: userInfo.id,
+        vehicle_license_plate: vehicleplate,
+        vehicle_model: vehiclemodel,
+        vehicle_category: vehiclecategory,
+        vehicle_color: vehiclecolor,
+      })
+    })
+    .then(resp => {
+      if(!resp.ok){
+        alert('Erro ao criar veículo. Tente novamente')
+        return ;
+      }
+    })
+    .then(() => {
+      alert('Usuário criado com sucesso!');
+      navigation.navigate('Login')
+    })
+    .catch(error => console.log(error))
+  }
+
+  const checkInput = () => {
+    if (!name){
+      alert('O campo nome é obrigatório')
+      return ;
+    }
+    if (!address){
+      alert('O campo endereço é obrigatório')
+      return ;
+    }
+    if (!cpf){
+      alert('O campo CPF é obrigatório')
+      return ;
+    }
+    else{
+      const numCPF = cpf.split('.').join('').split('-').join('')
+      if(numCPF.length !== 11){
+        alert('O campo CPF está inválido')
+        return ;
+      }
+      setCpf(numCPF)
+    }
+    if (!email){
+      alert('O campo email é obrigatório')
+      return ;
+    }
+    if (!telnumber){
+      alert('O campo número de telefone é obrigatório')
+      return ;
+    }
+    else{
+      const numTel = telnumber.replace('(', '').replace(')', '').replace(' ', '').replace('-', '')
+      if(numTel.length !== 11){
+        alert('O campo número de telefone está inválido')
+        return ;
+      }
+      setTelnumber(numTel)
+    }
+    if (!vehicleplate){
+      alert('O campo placa do veículo é obrigatório')
+      return ;
+    }
+    if (!vehiclemodel){
+      alert('O campo modelo do veículo é obrigatório')
+      return ;
+    }
+    if (vehiclecategory == type_options[0]){
+      alert('O campo categoria do veículo deve ser selecionado')
+      return ;
+    }
+    if (!vehiclecolor){
+      alert('O campo cor do veículo é obrigatório')
+      return ;
+    }
+    if (!username){
+      alert('O campo nome de usuário é obrigatório')
+      return ;
+    }
+    if (!password){
+      alert('O campo senha é obrigatório')
+      return ;
+    }
+    if (!repeatedPassword){
+      alert('O campo repetir a senha é obrigatório')
+      return ;
+    }
+    if(password !== repeatedPassword){
+      alert('As senhas devem ser iguais')
+      return ;
+    }
+    createPTUser();
+  }
 
   return <View style={estilos.container}>
     <ScrollView>
@@ -43,22 +193,15 @@ export default function Centro() {
         <Text style={estilos.fonte}>Dados do Motorista</Text>
         <TextInput
           placeholder="Insira seu nome"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={name}
           onChangeText={setName}
         />
-        <MaskInput
-          style={estilos.entrada}
-          mask={Masks.ZIP_CODE}
-          placeholder="Insira CEP"
-          placeholderTextColor={'#37323E'}
-          keyboardType={'numeric'}
-          value={cep}
-          onChangeText={setCep}
-        />
         <TextInput
           placeholder="Insira seu endereço"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={address}
@@ -68,13 +211,14 @@ export default function Centro() {
           style={estilos.entrada}
           mask={Masks.BRL_CPF}
           placeholder="Insira CPF"
-          placeholderTextColor={'#37323E'}
+          placeholderTextColor={'#6D6A75'}
           keyboardType={'numeric'}
           value={cpf}
           onChangeText={setCpf}
         />
         <TextInput
           placeholder="Insira e-mail"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={email}
@@ -84,7 +228,7 @@ export default function Centro() {
           style={estilos.entrada}
           mask={Masks.BRL_PHONE}
           placeholder="Insira n° telefone"
-          placeholderTextColor={'#37323E'}
+          placeholderTextColor={'#6D6A75'}
           keyboardType={'numeric'}
           value={telnumber}
           onChangeText={setTelnumber}
@@ -92,6 +236,7 @@ export default function Centro() {
         <Text style={estilos.fonte}>Dados do veículo</Text>
         <TextInput
           placeholder="Insira Placa"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={vehicleplate}
@@ -99,98 +244,61 @@ export default function Centro() {
         />
         <TextInput
           placeholder="Insira Modelo"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={vehiclemodel}
           onChangeText={setVehiclemodel}
         />
         <ModalDropdown
-          options={type_options}
+          options={type_options.slice(1, type_options.length)}
           style={estilos.entrada}
           dropdownStyle={estilos.dropdown_style}
           dropdownTextStyle={estilos.dropdown_text_options}
-          onSelect={(index) => setVehiclecategory(type_options[index])}
+          onSelect={(index) => setVehiclecategory(type_options[index + 1])}
         >
           <View style={estilos.dropdown_button}>
-            <Text style={estilos.dropdown_text_selected}>{vehiclecategory}</Text>
+            <Text style={vehiclecategory === type_options[0] ? [estilos.dropdown_text_selected, {color: '#6D6A75'}] : estilos.dropdown_text_selected}>{vehiclecategory}</Text>
           </View>
         </ModalDropdown>
-        <TextInput
-          placeholder="Insira Documento"
-          autoCapitalize="none"
-          style={estilos.entrada}
-          value={vehicledocument}
-          onChangeText={setVehicledocument}
-        />
-        <TextInput
-          placeholder="Insira Renavam"
-          autoCapitalize="none"
-          style={estilos.entrada}
-          value={vehiclerenavam}
-          onChangeText={setVehiclerenavam}
-        />
-        <TextInput
-          placeholder="Insira Chassi"
-          autoCapitalize="none"
-          style={estilos.entrada}
-          value={vehiclechassi}
-          onChangeText={setVehiclechassi}
-        />
-        <ModalDropdown
-          options={fuel_type_options}
-          style={estilos.entrada}
-          dropdownStyle={estilos.dropdown_style}
-          dropdownTextStyle={estilos.dropdown_text_options}
-          onSelect={(index) => setVehiclefuel(fuel_type_options[index])}
-        >
-          <View style={estilos.dropdown_button}>
-            <Text style={estilos.dropdown_text_selected}>{vehiclefuel}</Text>
-          </View>
-        </ModalDropdown>
-        <TextInput
-          placeholder="Insira Licença"
-          autoCapitalize="none"
-          style={estilos.entrada}
-          value={vehiclelicense}
-          onChangeText={setVehiclelicense}
-        />
         <TextInput
           placeholder="Insira Cor"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={vehiclecolor}
           onChangeText={setVehiclecolor}
         />
+        <Text style={estilos.fonte}>Credenciais</Text>
         <TextInput
-          placeholder="Insira Ano do Modelo"
+          placeholder="Insira seu nome de usuário"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
-          value={modelyear}
-          onChangeText={setModelyear}
+          value={username}
+          onChangeText={setUsername}
         />
-        <TextInput
-          placeholder="Insira Ano de Fabricação"
-          autoCapitalize="none"
-          style={estilos.entrada}
-          value={manufactureyear}
-          onChangeText={setManufactureyear}
-        />
-        <Text style={estilos.fonte}>Senha</Text>
         <TextInput
           placeholder="Insira sua senha"
+          placeholderTextColor={'#6D6A75'}
           secureTextEntry={true}
           autoCapitalize="none"
           style={estilos.entrada}
+          value={password}
+          onChangeText={setPassword}
         />
         <TextInput
           placeholder="Repita a senha"
+          placeholderTextColor={'#6D6A75'}
           secureTextEntry={true}
           autoCapitalize="none"
           style={estilos.entrada}
+          value={repeatedPassword}
+          onChangeText={setRepeatedPassword}
         />
         <TouchableOpacity
           style={estilos.botao}
-          onPress={() => { }}
+          onPress={() => { checkInput() }}
         >
           <Text style={estilos.textoBotao}>
             Cadastrar
@@ -265,7 +373,6 @@ const estilos = StyleSheet.create({
   dropdown_text_selected: {
     color: '#37323E',
     fontSize: 16,
-    marginLeft: 5,
   },
   dropdown_text_options: {
     backgroundColor: '#E6E6E6',

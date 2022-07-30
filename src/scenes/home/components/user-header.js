@@ -1,37 +1,58 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
+import { AuthContext } from "../../../navigators/root-navigator";
 import UserIcon from "./user-icon";
 import ChatIcon from "./chat-icon";
-import { useNavigation } from "@react-navigation/native";
 
 export default function UserHeader() {
   const navigation = useNavigation();
 
+  const { signOut } = useContext(AuthContext);
   const user = useContext(UserContext);
+
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (user.name){
+      const names = user.name.split(' ')
+      if (names.length > 1) setName(names[0] + ' ' + names[names.length - 1])
+      else setName(names[0])
+    }
+  }, [user.name])
 
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
-        {user.type == 'Motorista' ?
-          <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')}>
-            <UserIcon userType={user.type}/>
+        {user.user_type === 'PT' ?
+          <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')} >
+            <UserIcon />
           </TouchableOpacity>
-        : <UserIcon userType={user.type}/>
+        : <UserIcon />
         }
       </View>
       <View style={styles.user_info_view}>
-        <Text style={styles.user_name}>Guguinha Martins</Text>
+        <View style={{flexDirection: 'row'}}>
+          <Text style={styles.user_name} >{ user.user_type === 'PJ' ? user.fantasy_name : name }</Text>
+          <TouchableOpacity style={{marginStart: 10}} onPress={() => signOut()} >
+            <FontAwesomeIcon icon={faSignOut} color={'#DEB841'} size={25} />
+          </TouchableOpacity>
+        </View>
         <View style={styles.user_rating_view}>
-          {user.type === 'Motorista' && (
+          {user.user_type === 'PT' && (
+            user.number_of_ratings > 0 ? (
             <View style={{flexDirection: 'row'}}>
               <View style={styles.user_rating_star}>
                 <FontAwesomeIcon icon={faStar} color={'#DEB841'} size={28} />
               </View>
-              <Text style={styles.user_rating}> 4.87</Text>
+              <Text style={styles.user_rating}> {user.avg_rating.toFixed(2)}</Text>
             </View>
+            ) : (
+              <Text style={styles.user_rating}>Realize seu primeiro FRETZ !</Text>
+            )
           )}
         </View>
       </View>

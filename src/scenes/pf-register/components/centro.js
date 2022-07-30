@@ -1,18 +1,128 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import MaskInput, { Masks } from "react-native-mask-input";
-
 
 export default function Centro() {
   const navigation = useNavigation();
 
+  const [username, setUsername] = useState('')
   const [name, setName] = useState('')
-  const [cep, setCep] = useState('')
   const [address, setAddress] = useState('')
   const [cpf, setCpf] = useState('')
   const [email, setEmail] = useState('')
   const [telnumber, setTelnumber] = useState('')
+  const [password, setPassword] = useState('')
+  const [repeatedPassword, setRepeatedPassword] = useState('')
+
+  const createPFUser = () => {
+    fetch('http://10.0.2.2:8000/api/users/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => {
+      fetch('http://10.0.2.2:8000/auth/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username,
+          password
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => { 
+        fetch('http://10.0.2.2:8000/api/profile/' + jsonResp.id + '/', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${jsonResp.token}`
+          },
+          body: JSON.stringify({
+            user: jsonResp.id,
+            name,
+            address,
+            cpf,
+            email,
+            phone_number: telnumber,
+            user_type: 'PF'
+          })
+        })
+        .then(resp => resp.json())
+        .then(jsonResp => {
+          alert('Usuário criado com sucesso!');
+          navigation.navigate('Login')
+        })
+        .catch(error => console.log(error))
+      })
+      .catch(error => console.log(error))
+    })
+    .catch(error => console.log(error))
+  }
+
+  const checkInput = () => {
+    if (!name){
+      alert('O campo nome é obrigatório')
+      return ;
+    }
+    if (!address){
+      alert('O campo endereço é obrigatório')
+      return ;
+    }
+    if (!cpf){
+      alert('O campo CPF é obrigatório')
+      return ;
+    }
+    else{
+      const numCPF = cpf.split('.').join('').split('-').join('')
+      if(numCPF.length !== 11){
+        alert('O campo CPF está inválido')
+        return ;
+      }
+      setCpf(numCPF)
+    }
+    if (!email){
+      alert('O campo email é obrigatório')
+      return ;
+    }
+    if (!telnumber){
+      alert('O campo número de telefone é obrigatório')
+      return ;
+    }
+    else{
+      const numTel = telnumber.replace('(', '').replace(')', '').replace(' ', '').replace('-', '')
+      if(numTel.length !== 11){
+        alert('O campo número de telefone está inválido')
+        return ;
+      }
+      setTelnumber(numTel)
+    }
+    if (!username){
+      alert('O campo nome de usuário é obrigatório')
+      return ;
+    }
+    if (!password){
+      alert('O campo senha é obrigatório')
+      return ;
+    }
+    if (!repeatedPassword){
+      alert('O campo repetir a senha é obrigatório')
+      return ;
+    }
+    if(password !== repeatedPassword){
+      alert('As senhas devem ser iguais')
+      return ;
+    }
+    createPFUser();
+  }
 
   return <View style={estilos.container}>
     <ScrollView>
@@ -23,22 +133,15 @@ export default function Centro() {
         <Text style={estilos.fonte}>Dados do Cliente</Text>
         <TextInput
           placeholder="Insira seu nome"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={name}
           onChangeText={setName}
         />
-        <MaskInput
-          style={estilos.entrada}
-          mask={Masks.ZIP_CODE}
-          placeholder="Insira CEP"
-          placeholderTextColor={'#37323E'}
-          keyboardType={'numeric'}
-          value={cep}
-          onChangeText={setCep}
-        />
         <TextInput
           placeholder="Insira seu endereço"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={address}
@@ -48,13 +151,14 @@ export default function Centro() {
           style={estilos.entrada}
           mask={Masks.BRL_CPF}
           placeholder="Insira CPF"
-          placeholderTextColor={'#37323E'}
+          placeholderTextColor={'#6D6A75'}
           keyboardType={'numeric'}
           value={cpf}
           onChangeText={setCpf}
         />
         <TextInput
           placeholder="Insira e-mail"
+          placeholderTextColor={'#6D6A75'}
           autoCapitalize="none"
           style={estilos.entrada}
           value={email}
@@ -64,27 +168,41 @@ export default function Centro() {
           style={estilos.entrada}
           mask={Masks.BRL_PHONE}
           placeholder="Insira n° telefone"
-          placeholderTextColor={'#37323E'}
+          placeholderTextColor={'#6D6A75'}
           keyboardType={'numeric'}
           value={telnumber}
           onChangeText={setTelnumber}
         />
-        <Text style={estilos.fonte}>Senha</Text>
+        <Text style={estilos.fonte}>Credenciais</Text>
+        <TextInput
+          placeholder="Insira seu nome de usuário"
+          placeholderTextColor={'#6D6A75'}
+          autoCapitalize="none"
+          style={estilos.entrada}
+          value={username}
+          onChangeText={setUsername}
+        />
         <TextInput
           placeholder="Insira sua senha"
+          placeholderTextColor={'#6D6A75'}
           secureTextEntry={true}
           autoCapitalize="none"
           style={estilos.entrada}
+          value={password}
+          onChangeText={setPassword}
         />
         <TextInput
           placeholder="Repita a senha"
+          placeholderTextColor={'#6D6A75'}
           secureTextEntry={true}
           autoCapitalize="none"
           style={estilos.entrada}
+          value={repeatedPassword}
+          onChangeText={setRepeatedPassword}
         />
         <TouchableOpacity
           style={estilos.botao}
-          onPress={() => { }}
+          onPress={() => { checkInput() }}
         >
           <Text style={estilos.textoBotao}>
             Cadastrar
