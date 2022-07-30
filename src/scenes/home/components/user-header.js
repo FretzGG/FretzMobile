@@ -42,7 +42,7 @@ export default function UserHeader() {
           </TouchableOpacity>
         </View>
         <View style={styles.user_rating_view}>
-          {user.user_type === 'PT' && 
+          {user.user_type === 'PT' && (
             user.number_of_ratings > 0 ? (
             <View style={{flexDirection: 'row'}}>
               <View style={styles.user_rating_star}>
@@ -53,7 +53,7 @@ export default function UserHeader() {
             ) : (
               <Text style={styles.user_rating}>Realize seu primeiro FRETZ !</Text>
             )
-          }
+          )}
         </View>
       </View>
       <View style={styles.chat_view}>
