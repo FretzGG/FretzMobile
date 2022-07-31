@@ -1,16 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faIndustry, faTruckFast } from "@fortawesome/free-solid-svg-icons";
-import { UserContext } from "../../../navigators/app-navigator";
 
-export default function UserIcon() {
-  const user = useContext(UserContext);
-
+export default function UserIcon(props) {
   return(
     <View>
-      {user.profile_pic ? (
-        <Image source={{ uri: user.profile_pic }} style={ styles.user_photo_circle } />
+      {props.profile_pic ? (
+        <Image source={{ uri: props.profile_pic }} style={ styles.user_photo_circle } />
       ) : ( 
         <View style={styles.user_photo_circle}>
           <FontAwesomeIcon 
@@ -20,10 +17,10 @@ export default function UserIcon() {
           />
         </View>
       )}
-      {user.user_type !== 'PF' && 
+      {props.user_type !== 'PF' && 
         <View style={styles.user_type_circle}>
           <FontAwesomeIcon 
-            icon={user.user_type === 'PJ' ? faIndustry : faTruckFast}
+            icon={props.user_type === 'PJ' ? faIndustry : faTruckFast}
             color={'#DEB841'}
             size={30}
           />

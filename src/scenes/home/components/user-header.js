@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import { AuthContext } from "../../../navigators/root-navigator";
-import UserIcon from "./user-icon";
+import UserIcon from "../../../components/user-icon";
 import ChatIcon from "./chat-icon";
 
 export default function UserHeader() {
@@ -29,9 +29,9 @@ export default function UserHeader() {
       <View style={styles.user_icon_view}>
         {user.user_type === 'PT' ?
           <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')} >
-            <UserIcon />
+            <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
           </TouchableOpacity>
-        : <UserIcon />
+        : <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
         }
       </View>
       <View style={styles.user_info_view}>

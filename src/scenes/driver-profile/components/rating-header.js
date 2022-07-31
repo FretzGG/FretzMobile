@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
-import UserIcon from "../../home/components/user-icon";
+import UserIcon from "../../../components/user-icon";
 
 export default function RatingHeader() {
   const navigation = useNavigation();
@@ -39,7 +39,7 @@ export default function RatingHeader() {
           navigation.navigate('Rate Delivery')
         }}
       >
-        <UserIcon />
+        <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
       </TouchableOpacity>
     </View>
   );
