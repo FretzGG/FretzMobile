@@ -18,11 +18,15 @@ export default function RatingBody() {
   const [ fiveStars, setFiveStar ] = useState(0)
 
   useEffect(() => {
-    fetch('http://10.0.2.2:8000/api/ratings/', {
-      method: 'GET',
+    fetch('http://10.0.2.2:8000/api/ratings/get_user_ratings/', {
+      method: 'POST',
       headers: {
-        'Authorization': `Token ${userToken}`
-      }
+        'Authorization': `Token ${userToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'profile_evaluated': user.id
+      })
     })
     .then(resp => resp.json())
     .then(jsonResp => setRatings(jsonResp))
@@ -104,7 +108,7 @@ export default function RatingBody() {
                 <View>
                   <View style={{flexDirection: 'row'}}>
                     <Text style={styles.title}>{item.profile_evaluator}</Text>
-                    <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({dateFormated(item.post_date)})</Text>
+                    <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({dateFormated(item.rating_date_time)})</Text>
                   </View>
                   <View style={{paddingTop: 5, flexDirection: 'row'}}>
                     {item.stars > 0 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
