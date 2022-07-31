@@ -4,9 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import ProfileIcon from "../../../components/profile-icon";
 
-export default function RateSelection() {
-  const [stars, setStars] = useState(0);
-
+export default function RateSelection(props) {
   const driver = {
     name: 'Guguinha da Silva'
   }
@@ -18,20 +16,20 @@ export default function RateSelection() {
       </View>
       <Text style={styles.name}>{driver.name}</Text>
       <View style={styles.stars}>
-        <TouchableOpacity onPress={() => setStars(1)}>
-          <FontAwesomeIcon icon={faStar} size={50} color={stars > 0 ? '#DEB841' : '#6D6A75'} />
+        <TouchableOpacity onPress={() => props.setStars(1)}>
+          <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 0 ? '#DEB841' : '#6D6A75'} />
         </TouchableOpacity>
-        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => setStars(2)}>
-          <FontAwesomeIcon icon={faStar} size={50} color={stars > 1 ? '#DEB841' : '#6D6A75'} />
+        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.setStars(2)}>
+          <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 1 ? '#DEB841' : '#6D6A75'} />
         </TouchableOpacity>
-        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => setStars(3)}>
-          <FontAwesomeIcon icon={faStar} size={50} color={stars > 2 ? '#DEB841' : '#6D6A75'} />
+        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.setStars(3)}>
+          <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 2 ? '#DEB841' : '#6D6A75'} />
         </TouchableOpacity>
-        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => setStars(4)}>
-          <FontAwesomeIcon icon={faStar} size={50} color={stars > 3 ? '#DEB841' : '#6D6A75'} />
+        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.setStars(4)}>
+          <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 3 ? '#DEB841' : '#6D6A75'} />
         </TouchableOpacity>
-        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => setStars(5)}>
-          <FontAwesomeIcon icon={faStar} size={50} color={stars > 4 ? '#DEB841' : '#6D6A75'} />
+        <TouchableOpacity style={{paddingLeft: 10}} onPress={() => props.setStars(5)}>
+          <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 4 ? '#DEB841' : '#6D6A75'} />
         </TouchableOpacity>
       </View>
     </View>
