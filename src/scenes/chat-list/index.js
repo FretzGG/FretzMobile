@@ -22,15 +22,9 @@ export default function ChatList () {
       })
     })
     .then(resp => resp.json())
-    .then(jsonResp => {console.log(jsonResp); setChats(jsonResp)})
+    .then(jsonResp => setChats(jsonResp))
     .catch(error => console.log(error))
   }, [])
-
-  // const chats = [
-  //   {id: 0, clientName: 'Guguinha Martins', deliveryID: 1234},
-  //   {id: 1, clientName: 'Guguinha Lopes', deliveryID: 4567},
-  //   {id: 2, clientName: 'Guguinha Cardoso', deliveryID: 6910}
-  // ];
 
   return (
     <View style={styles.container}>
