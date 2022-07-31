@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import ProfileIcon from "../../../components/profile-icon";
+import { UserContext } from "../../../navigators/app-navigator";
+import UserIcon from "../../home/components/user-icon";
 
 export default function RatingHeader() {
   const navigation = useNavigation();
+
+  const user = useContext(UserContext);
+
+  const [name, setName] = useState('');
+
+  useEffect(() => {
+    if (user.name){
+      const names = user.name.split(' ')
+      if (names.length > 1) setName(names[0] + ' ' + names[names.length - 1])
+      else setName(names[0])
+    }
+  }, [user.name])
 
   return (
     <View style={styles.container}>
@@ -18,7 +31,7 @@ export default function RatingHeader() {
       </TouchableOpacity>
       <View style={{flex: 3, marginTop: 12, alignItems: 'flex-end'}}>
         <Text style={styles.rating_screen_title}>Avaliações</Text>
-        <Text style={styles.user_name}>Guguinha Martins</Text>
+        <Text style={styles.user_name}>{name}</Text>
       </View>
       <TouchableOpacity // Depois voltar isso para View
         style={[styles.center, {flex: 2}]}
@@ -26,7 +39,7 @@ export default function RatingHeader() {
           navigation.navigate('Rate Delivery')
         }}
       >
-        <ProfileIcon iconSize={60} iconColor={'#DEB841'} circleRadius={85} circleColor={'#37323E'} />
+        <UserIcon />
       </TouchableOpacity>
     </View>
   );
