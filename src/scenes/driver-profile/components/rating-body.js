@@ -1,26 +1,71 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { UserContext } from "../../../navigators/app-navigator";
+import { AuthContext } from "../../../navigators/root-navigator";
 import ProfileIcon from "../../../components/profile-icon";
 
 export default function RatingBody() {
-  const ratings = {
-    oneStar: 0,
-    twoStars: 0,
-    threeStars: 1,
-    fourStars: 2,
-    fiveStars: 22,
-    mean: 4.87,
-    total: 25,
-    comments: [
-      {id: 0, userName: 'Guguinha Neves', noOfStars: 5, text: 'O frete foi excelente, a carga foi transportada sem nenhum imprevisto', date: '12/05/2022'},
-      {id: 1, userName: 'Guguinha Cardoso', noOfStars: 4, text: 'O frete foi bom, mas a carga foi transportada com um pouco de atraso', date: '29/05/2022'},
-      {id: 2, userName: 'Guguinha Eguchi', noOfStars: 3, text: 'O frete foi razoável, er a carga foi transportada com um atraso considerável', date: '29/05/2022'},
-      {id: 3, userName: 'Guguinha Lopes', noOfStars: 4, text: 'O frete foi bom, porém a caixa amassou um pouco', date: '30/06/2022'}
-    ]
-  };
+  const user = useContext(UserContext);
+  const { userToken } = useContext(AuthContext);
 
+  const [ ratings, setRatings ] = useState([])
+  const [ oneStar, setOneStar ] = useState(0)
+  const [ twoStars, setTwoStar ] = useState(0)
+  const [ threeStars, setThreeStar ] = useState(0)
+  const [ fourStars, setFourStar ] = useState(0)
+  const [ fiveStars, setFiveStar ] = useState(0)
+
+  useEffect(() => {
+    fetch('http://10.0.2.2:8000/api/ratings/get_user_ratings/', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Token ${userToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'profile_evaluated': user.id
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setRatings(jsonResp))
+    .catch(error => console.log(error))
+  }, [ user ])
+
+  useEffect(() => {
+    setOneStar(0)
+    setTwoStar(0)
+    setThreeStar(0)
+    setFourStar(0)
+    setFiveStar(0)
+    ratings.forEach(rating => {
+      switch (rating.stars) {
+        case 1:
+          setOneStar(oneStar + 1)
+          break;
+        case 2:
+          setTwoStar(twoStars + 1)
+          break;
+        case 3:
+          setThreeStar(threeStars + 1)
+          break;
+        case 4:
+          setFourStar(fourStars + 1)
+          break;
+        case 5:
+          setFiveStar(fiveStars + 1)
+          break;
+      }
+    });
+  }, [ ratings ])
+
+  const dateFormated = (post_date) => {
+    const date = post_date.split('T')[0]
+    const date_separated = date.split('-')
+    return date_separated[2] + '/' + date_separated[1] + '/' + date_separated[0]
+  }
+  
   return (
     <View style={styles.container}>
       <FlatList
@@ -29,24 +74,24 @@ export default function RatingBody() {
             <View style={styles.section} >
               <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
                 <FontAwesomeIcon icon={faStar} color={'#DEB841'} />
-                <Text style={styles.title}> {ratings.mean}/5</Text>
+                <Text style={styles.title}> {user.avg_rating.toFixed(2)} / 5.00</Text>
               </View>
-              <Text style={styles.text}>{ratings.total} avaliações</Text>
+              <Text style={styles.text}>{user.number_of_ratings} avaliações</Text>
             </View>
             <View style={[styles.section, {flexDirection: 'row'}]} >
               <View style={{flex: 1, alignItems: 'flex-start'}}>
                 <Text style={[styles.title, {paddingVertical: 5}]}>Excelente</Text>
                 <Text style={[styles.title, {paddingVertical: 5}]}>Muito Bom</Text>
                 <Text style={[styles.title, {paddingVertical: 5}]}>Regular</Text>
-                <Text style={[styles.title, {paddingVertical: 5}]}>Decepcionante</Text>
                 <Text style={[styles.title, {paddingVertical: 5}]}>Ruim</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>Decepcionante</Text>
               </View>
               <View style={{flex: 1, alignItems: 'flex-end'}}>
-                <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.fiveStars}</Text>
-                <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.fourStars}</Text>
-                <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.threeStars}</Text>
-                <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.twoStars}</Text>
-                <Text style={[styles.title, {paddingVertical: 5}]}>{ratings.oneStar}</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>{fiveStars}</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>{fourStars}</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>{threeStars}</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>{twoStars}</Text>
+                <Text style={[styles.title, {paddingVertical: 5}]}>{oneStar}</Text>
               </View>
             </View>
             <Text style={[styles.title, {color: '#DEB841', textDecorationLine: 'underline', fontSize: 25, textAlign: 'center', paddingTop: 10}]}>
@@ -54,28 +99,30 @@ export default function RatingBody() {
             </Text>
           </>
         }
-        data={ratings.comments}
+        data={ratings}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
-          <View style={styles.section}> 
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.title}>{item.userName}</Text>
-                  <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({item.date})</Text>
+          item.comment !== '' && item.comment !== null && (
+            <View style={styles.section}> 
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.title}>{item.profile_evaluator}</Text>
+                    <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({dateFormated(item.rating_date_time)})</Text>
+                  </View>
+                  <View style={{paddingTop: 5, flexDirection: 'row'}}>
+                    {item.stars > 0 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
+                    {item.stars > 1 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
+                    {item.stars > 2 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
+                    {item.stars > 3 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
+                    {item.stars > 4 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
+                  </View>
                 </View>
-                <View style={{paddingTop: 5, flexDirection: 'row'}}>
-                  {item.noOfStars > 0 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
-                  {item.noOfStars > 1 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
-                  {item.noOfStars > 2 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
-                  {item.noOfStars > 3 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
-                  {item.noOfStars > 4 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
-                </View>
+                <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={50} circleColor={'#DEB841'} />
               </View>
-              <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={50} circleColor={'#DEB841'} />
+              <Text style={[styles.text, {paddingTop: 10}]}>{item.comment}</Text>
             </View>
-            <Text style={[styles.text, {paddingTop: 10}]}>{item.text}</Text>
-          </View>
+          )
         )}
       />
     </View>
