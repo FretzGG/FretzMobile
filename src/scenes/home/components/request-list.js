@@ -21,7 +21,7 @@ export default function RequestList(){
         onPress={() => {
           navigation.navigate('Delivery Request Details', {
             title: props.item.title,
-            status: user.type === 'Motorista' ? 'Em progresso' : 'Ativo'
+            status: user.type === 'PT' ? 'Em progresso' : 'Ativo'
           });
         }} 
         style={styles.item_view}
@@ -50,13 +50,13 @@ export default function RequestList(){
             size={30}
           />
           <Text style={styles.request_header_text}>   {
-            user.type !== 'Motorista' ?
+            user.type !== 'PT' ?
              'Minhas Requisições' 
              : 'Meus Fretes'
              } 
           </Text>
         </View>
-        {user.type !== 'Motorista' && 
+        {user.type !== 'PT' && 
           <TouchableOpacity onPress={() => 
             navigation.navigate('Delivery Request Form', {
               title: 'Novo Frete'
@@ -79,7 +79,7 @@ export default function RequestList(){
           )}
         />
       </View>
-      {user.type === 'Motorista' &&
+      {user.type === 'PT' &&
         <LargeButton 
           title={'Procurar FRETZ'} 
           onPress={() => navigation.navigate('Delivery Search', {
