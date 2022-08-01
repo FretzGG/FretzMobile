@@ -1,23 +1,36 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faInfo } from "@fortawesome/free-solid-svg-icons";
+import { UserContext } from "../../navigators/app-navigator";
+import { AuthContext } from "../../navigators/root-navigator";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
-import { UserContext } from "../../navigators/app-navigator";
 
 export default function Chat (props) {
   const user = useContext(UserContext);
+  const { userToken } = useContext(AuthContext);
   
   const navigation = useNavigation();
 
-  const messages = [
-    {id: 0, userName: 'Guguinha Martins', content: 'Oi!'},
-    {id: 1, userName: 'Guguinha Neves', content: 'Olá!'},
-    {id: 2, userName: 'Guguinha Martins', content: 'A entrega chegará no prazo?'},
-    {id: 3, userName: 'Guguinha Neves', content: 'Sim, ela chegará no prazo acordado.'},
-  ];
+  const [ messages, setMessages ] = useState([]);
+
+  useEffect(() => {
+    fetch('http://10.0.2.2:8000/api/message/get_chat/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        'chat': props.route.params.chat_id
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setMessages(jsonResp))
+    .catch(error => console.log(error))
+  }, [])
 
   // Isso vai salvar a mensagem do historico de chat
   const newMessage = (content) => {
@@ -31,7 +44,8 @@ export default function Chat (props) {
           style={styles.info_circle}
           onPress={() => {
             navigation.navigate('Delivery Request Details', {
-              title: props.route.params.title
+              title: props.route.params.title,
+              shipping: props.route.params.shipping
             })
           }}>
             <FontAwesomeIcon icon={faInfo} color={'#DEB841'} size={25}/>
@@ -43,7 +57,7 @@ export default function Chat (props) {
   // TODO: Arrumar o view de quando o teclado esta aberto
   return (
     <View style={styles.container}>
-      <Messages messages={messages}/>
+      <Messages messages={messages} other_user={props.route.params.other_user_name} />
       <MessageInput writeMessage={newMessage} />
     </View>
   );
