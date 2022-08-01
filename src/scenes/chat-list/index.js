@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { UserContext } from "../../navigators/app-navigator";
 import { AuthContext } from "../../navigators/root-navigator";
 import ChatItem from "./components/chat-item";
+import { server_url } from "../../utils/utils";
 
 export default function ChatList () {
   const user = useContext(UserContext);
@@ -11,7 +12,7 @@ export default function ChatList () {
   const [ chats, setChats ] = useState([]);
 
   useEffect(() => {
-    fetch('http://10.0.2.2:8000/api/chat/get_user_chats/', {
+    fetch(server_url + 'api/chat/get_user_chats/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

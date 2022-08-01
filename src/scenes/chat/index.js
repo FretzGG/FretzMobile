@@ -7,6 +7,7 @@ import { UserContext } from "../../navigators/app-navigator";
 import { AuthContext } from "../../navigators/root-navigator";
 import Messages from "./components/messages";
 import MessageInput from "./components/message-input";
+import { server_url } from "../../utils/utils";
 
 export default function Chat (props) {
   const user = useContext(UserContext);
@@ -16,8 +17,8 @@ export default function Chat (props) {
 
   const [ messages, setMessages ] = useState([]);
 
-  useEffect(() => {
-    fetch('http://10.0.2.2:8000/api/message/get_chat/', {
+  const loadMessages = () => {
+    fetch(server_url + 'api/message/get_chat/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -30,11 +31,30 @@ export default function Chat (props) {
     .then(resp => resp.json())
     .then(jsonResp => setMessages(jsonResp))
     .catch(error => console.log(error))
-  }, [])
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadMessages();
+    }, 1000)
+    return () => clearInterval(interval)
+  }, []);
 
   // Isso vai salvar a mensagem do historico de chat
   const newMessage = (content) => {
-    messages.push({id: 4, userName: user.name, content: content});
+    fetch(server_url + 'api/message/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        'chat': props.route.params.chat_id,
+        'sender': user.id,
+        'receiver': props.route.params.other_user_id,
+        'message': content,
+      })
+    })
   }
 
   useEffect(() => {

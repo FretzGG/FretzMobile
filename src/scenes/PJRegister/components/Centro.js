@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import MaskInput, { Masks } from "react-native-mask-input";
-
+import { server_url } from '../../../utils/utils';
 
 export default function Centro() {
   const navigation = useNavigation();
@@ -17,7 +17,7 @@ export default function Centro() {
   const [repeatedPassword, setRepeatedPassword] = useState('')
 
   const createPJUser = () => {
-    fetch('http://10.0.2.2:8000/api/users/', {
+    fetch(server_url + 'api/users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default function Centro() {
     })
     .then(resp => resp.json())
     .then(jsonResp => {
-      fetch('http://10.0.2.2:8000/auth/', {
+      fetch(server_url + 'auth/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -41,7 +41,7 @@ export default function Centro() {
       })
       .then(resp => resp.json())
       .then(jsonResp => { 
-        fetch('http://10.0.2.2:8000/api/profile/' + jsonResp.id + '/', {
+        fetch(server_url + 'api/profile/' + jsonResp.id + '/', {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

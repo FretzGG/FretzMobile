@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
-
+import { server_url } from '../../../utils/utils';
 
 export default function Centro() {
   const navigation = useNavigation();
@@ -28,7 +28,7 @@ export default function Centro() {
   const [vehiclecolor, setVehiclecolor] = useState('')
 
   const createPTUser = () => {
-    fetch('http://10.0.2.2:8000/api/users/', {
+    fetch(server_url + 'api/users/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export default function Centro() {
       }
     })
     .then(() => {
-      fetch('http://10.0.2.2:8000/auth/', {
+      fetch(server_url + 'auth/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -63,7 +63,7 @@ export default function Centro() {
   }
 
   const updateProfile = (userInfo) => {
-    fetch('http://10.0.2.2:8000/api/profile/' + userInfo.id + '/', {
+    fetch(server_url + 'api/profile/' + userInfo.id + '/', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ export default function Centro() {
   }
 
   const createVehicle = (userInfo) => {
-    fetch('http://10.0.2.2:8000/api/vehicle/', {
+    fetch(server_url + 'api/vehicle/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

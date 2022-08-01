@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { UserContext } from "../../../navigators/app-navigator";
 import { AuthContext } from "../../../navigators/root-navigator";
 import ProfileIcon from "../../../components/profile-icon";
+import { server_url } from "../../../utils/utils";
 
 export default function RatingBody() {
   const user = useContext(UserContext);
@@ -18,7 +19,7 @@ export default function RatingBody() {
   const [ fiveStars, setFiveStar ] = useState(0)
 
   useEffect(() => {
-    fetch('http://10.0.2.2:8000/api/ratings/get_user_ratings/', {
+    fetch(server_url + 'api/ratings/get_user_ratings/', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${userToken}`,

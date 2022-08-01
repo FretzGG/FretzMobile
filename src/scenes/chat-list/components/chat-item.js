@@ -6,6 +6,7 @@ import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import { AuthContext } from "../../../navigators/root-navigator";
 import ProfileIcon from "../../../components/profile-icon";
+import { server_url } from "../../../utils/utils";
 
 export default function ChatItem (props) {
   const navigation = useNavigation();
@@ -18,7 +19,7 @@ export default function ChatItem (props) {
   const other_user_id = user.id !== props.chat.user_one ? props.chat.user_one : props.chat.user_two;
 
   useEffect(() => {
-    fetch('http://10.0.2.2:8000/api/profile/' + other_user_id + ' /', {
+    fetch(server_url + 'api/profile/' + other_user_id + ' /', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
