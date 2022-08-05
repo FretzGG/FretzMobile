@@ -25,7 +25,8 @@ export default function Chat (props) {
         'Authorization': `Token ${userToken}`
       },
       body: JSON.stringify({
-        'chat': props.route.params.chat_id
+        'chat': props.route.params.chat_id,
+        'user_receiver': user.id
       })
     })
     .then(resp => resp.json())
