@@ -5,16 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import { AuthContext } from "../../../navigators/root-navigator";
+import { server_url } from "../../../utils/utils";
 import UserIcon from "../../../components/user-icon";
 import ChatIcon from "./chat-icon";
 
 export default function UserHeader() {
   const navigation = useNavigation();
 
-  const { signOut } = useContext(AuthContext);
+  const { signOut, userToken } = useContext(AuthContext);
   const user = useContext(UserContext);
 
   const [name, setName] = useState('');
+  const [unreadNo, setUnreadNo] = useState(0);
 
   useEffect(() => {
     if (user.name){
@@ -23,6 +25,29 @@ export default function UserHeader() {
       else setName(names[0])
     }
   }, [user.name])
+
+  const loadUnreadMessagesNumber = () => {
+    fetch(server_url + 'api/message/get_unread_message_number/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        'user': user.id
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setUnreadNo(jsonResp.message_number))
+    .catch(error => console.log(error))
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadUnreadMessagesNumber();
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [ unreadNo ]);
 
   return (
     <View style={styles.container}>
@@ -62,7 +87,7 @@ export default function UserHeader() {
             title: 'Chat'
           })
         }>
-          <ChatIcon unreadNo={2} />
+          <ChatIcon unreadNo={unreadNo} />
         </TouchableOpacity>
       </View>
     </View>
