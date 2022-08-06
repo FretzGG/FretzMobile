@@ -60,9 +60,7 @@ export default function Form(props) {
           navigation.goBack();
         }
         else alert('Ocorreu algum problema. Tente novamente mais tarde')
-        return resp.json()
       })
-      .then(json => console.log(json))
       .catch(error => console.log(error))
     )
   }, [ createShipping ])
