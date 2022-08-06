@@ -9,6 +9,7 @@ import DriverProfile from "../scenes/driver-profile";
 import RateDelivery from "../scenes/rate-delivery";
 import ChatList from "../scenes/chat-list";
 import Chat from "../scenes/chat";
+import { server_url } from "../utils/utils";
 
 export const UserContext = createContext();
 
@@ -21,7 +22,7 @@ export default function AppNavigator() {
 
   useMemo(() => {
     if(userID != null) {
-      fetch('http://10.0.2.2:8000/api/profile/' + userID, {
+      fetch(server_url + 'api/profile/' + userID, {
         method: 'GET',
         headers: {
           'Authorization': `Token ${userToken}`

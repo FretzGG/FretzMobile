@@ -5,16 +5,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
 import { AuthContext } from "../../../navigators/root-navigator";
-import UserIcon from "./user-icon";
+import { server_url } from "../../../utils/utils";
+import UserIcon from "../../../components/user-icon";
 import ChatIcon from "./chat-icon";
 
 export default function UserHeader() {
   const navigation = useNavigation();
 
-  const { signOut } = useContext(AuthContext);
+  const { signOut, userToken } = useContext(AuthContext);
   const user = useContext(UserContext);
 
   const [name, setName] = useState('');
+  const [unreadNo, setUnreadNo] = useState(0);
 
   useEffect(() => {
     if (user.name){
@@ -24,14 +26,37 @@ export default function UserHeader() {
     }
   }, [user.name])
 
+  const loadUnreadMessagesNumber = () => {
+    fetch(server_url + 'api/message/get_unread_message_number/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        'user': user.id
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setUnreadNo(jsonResp.message_number))
+    .catch(error => console.log(error))
+  }
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      loadUnreadMessagesNumber();
+    }, 1000)
+    return () => clearInterval(interval)
+  }, [ unreadNo ]);
+
   return (
     <View style={styles.container}>
       <View style={styles.user_icon_view}>
         {user.user_type === 'PT' ?
           <TouchableOpacity onPress={() => navigation.navigate('Driver Profile')} >
-            <UserIcon />
+            <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
           </TouchableOpacity>
-        : <UserIcon />
+        : <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
         }
       </View>
       <View style={styles.user_info_view}>
@@ -62,7 +87,7 @@ export default function UserHeader() {
             title: 'Chat'
           })
         }>
-          <ChatIcon unreadNo={2} />
+          <ChatIcon unreadNo={unreadNo} />
         </TouchableOpacity>
       </View>
     </View>

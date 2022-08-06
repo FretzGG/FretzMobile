@@ -7,16 +7,21 @@ export default function Messages (props) {
 
   return (
     <View style={styles.container}>
-      <FlatList 
+      <FlatList
+        ListHeaderComponent={
+          <View >
+            <Text style={{ color: '#DEB841', fontWeight: 'bold', marginTop: 5, marginStart: 10 }}>{props.other_user}</Text> 
+          </View>
+        }
         data={props.messages}
         keyExtractor={item => item.id}
         renderItem={({item}) => 
           <View style={[styles.message_box, {
-            alignSelf: item.userName === user.name ? 'flex-end' : 'flex-start',
-            backgroundColor: item.userName === user.name ? '#DEB841' : '#E6E6E6'
+            alignSelf: item.sender === user.id ? 'flex-end' : 'flex-start',
+            backgroundColor: item.sender === user.id ? '#DEB841' : '#E6E6E6'
           }]}>
-            <View style={item.userName === user.name ? styles.triangle_right : styles.triangle_left}/>
-            <Text style={styles.text}>{item.content}</Text>
+            <View style={item.sender === user.id ? styles.triangle_right : styles.triangle_left}/>
+            <Text style={styles.text}>{item.message}</Text>
           </View>
         }
       />

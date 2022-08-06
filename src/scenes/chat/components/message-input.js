@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, StyleSheet, Text, TextInput, View } from "react-native";
 import LargeButton from "../../../components/large-button";
 
 export default function MessageInput (props) {
@@ -20,7 +20,11 @@ export default function MessageInput (props) {
       </View>
       <LargeButton 
         title={'Enviar'}
-        onPress={() => props.writeMessage(message)}
+        onPress={() => {
+          Keyboard.dismiss()
+          props.writeMessage(message)
+          setMessage('')
+        }}
       />
     </View>
   );

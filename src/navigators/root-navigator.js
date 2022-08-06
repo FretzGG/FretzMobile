@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import LoginRegister from "./LoginRegister";
 import AppNavigator from "./app-navigator";
 import LoadingScreen from "../scenes/loading";
+import { server_url } from "../utils/utils";
 
 const Stack = createNativeStackNavigator();
 
@@ -49,7 +50,7 @@ export default function RootNavigator() {
 
   const authContext = useMemo(() => ({
     signIn: async (data) => {
-      fetch('http://10.0.2.2:8000/auth/', {
+      fetch(server_url + 'auth/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

@@ -1,12 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import { StyleSheet, View } from "react-native";
-import { UserContext } from "../../navigators/app-navigator";
 import RequestList from "./components/request-list";
 import UserHeader from "./components/user-header";
 
 export default function HomeScreen() {
-  const user = useContext(UserContext);
-
   return (
     <View style={styles.container}>
       <UserHeader />
