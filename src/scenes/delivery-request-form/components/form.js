@@ -44,10 +44,10 @@ export default function Form(props) {
           shipping_type : selectedOption,
           departure_location : departureAddress,
           delivery_location : deliveryAddress,
-          cargo_weight : weight,
-          width,
-          length,
-          height,
+          cargo_weight : weight !== '' ? weight : null,
+          width: width !== '' ? width : null,
+          length: length !== '' ? length : null,
+          height: height !== '' ? height: null,
           deadline,
           opening_bid : suggestedPrice,
           user_posted : user.id
@@ -60,7 +60,9 @@ export default function Form(props) {
           navigation.goBack();
         }
         else alert('Ocorreu algum problema. Tente novamente mais tarde')
+        return resp.json()
       })
+      .then(json => console.log(json))
       .catch(error => console.log(error))
     )
   }, [ createShipping ])
@@ -84,22 +86,6 @@ export default function Form(props) {
     }
     if (!deliveryAddress){
       alert('O campo endereço de entrega é obrigatório')
-      return ;
-    }
-    if (!weight){
-      alert('O campo peso é obrigatório')
-      return ;
-    }
-    if (!width){
-      alert('O campo comprimento é obrigatório')
-      return ;
-    }
-    if (!length){
-      alert('O campo largura é obrigatório')
-      return ;
-    }
-    if (!height){
-      alert('O campo altura é obrigatório')
       return ;
     }
     if (!deadline){
@@ -126,7 +112,7 @@ export default function Form(props) {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.input_title}>Nome da Carga</Text>
+      <Text style={styles.input_title}>Nome da Carga *</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
@@ -142,7 +128,7 @@ export default function Form(props) {
         value={description}
         onChangeText={setDescription}
       />
-      <Text style={styles.input_title}>Tipo</Text>
+      <Text style={styles.input_title}>Tipo *</Text>
       <ModalDropdown 
         options={type_options.slice(1, type_options.length)}
         dropdownStyle={styles.dropdown_style}
@@ -153,14 +139,14 @@ export default function Form(props) {
           <Text style={styles.dropdown_text_selected}>{selectedOption}</Text>
         </View>
       </ModalDropdown>
-      <Text style={styles.input_title}>Endereço de saída</Text>
+      <Text style={styles.input_title}>Endereço de saída *</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
         value={departureAddress}
         onChangeText={setDepartureAddress}
       />
-      <Text style={styles.input_title}>Endereço de entrega</Text>
+      <Text style={styles.input_title}>Endereço de entrega *</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
@@ -199,7 +185,7 @@ export default function Form(props) {
         value={height}
         onChangeText={setHeight}
       />
-      <Text style={styles.input_title}>Prazo de entrega</Text>
+      <Text style={styles.input_title}>Prazo de entrega *</Text>
       <MaskInput
         style={styles.text_input}
         mask={Masks.DATE_DDMMYYYY}
@@ -231,7 +217,7 @@ export default function Form(props) {
         </Text>
       </TouchableOpacity>
       <View style={styles.price_view}>
-        <Text style={styles.price_title}>Valor previsto</Text>
+        <Text style={styles.price_title}>Valor previsto *</Text>
         <MaskInput
           style={styles.price_number}
           mask={Masks.BRL_CURRENCY}
