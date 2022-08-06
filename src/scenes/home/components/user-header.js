@@ -51,7 +51,7 @@ export default function UserHeader() {
       loadUnreadMessagesNumber();
     }, 1000)
     return () => clearInterval(interval)
-  }, [ isFocused ]);
+  }, [ isFocused, user ]);
 
   return (
     <View style={styles.container}>
