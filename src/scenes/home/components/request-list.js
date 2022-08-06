@@ -1,19 +1,46 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faBoxArchive, faPlus, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import { AuthContext } from "../../../navigators/root-navigator";
 import { UserContext } from "../../../navigators/app-navigator";
+import { server_url } from "../../../utils/utils";
 import LargeButton from "../../../components/large-button";
 
 export default function RequestList(){
   const navigation = useNavigation();
-  const user = useContext(UserContext);
 
-  const [requests, setRequests] = useState([
-    {id: 1, title: 'Requisição 1'},
-    {id: 2, title: 'Requisição 2'},
-    {id: 3, title: 'Requisição 3'}])
+  const user = useContext(UserContext);
+  const { userToken } = useContext(AuthContext);
+
+  const isFocused = useIsFocused();
+
+  const [requests, setRequests] = useState([])
+
+  useEffect(() => {
+    isFocused && (
+      fetch(server_url + 'api/shipping/get_user_shippings/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: user.user_type === 'PT' ? (
+          JSON.stringify({
+            'user_transporter': user.id
+          })
+        ) : (
+          JSON.stringify({
+            'user_posted': user.id
+          })
+        )
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setRequests(jsonResp))
+      .catch(error => console.log(error))
+    )
+  }, [ isFocused, user ])
 
   const Item = (props) => (
     <View style={styles.item_box}>
@@ -21,7 +48,7 @@ export default function RequestList(){
         onPress={() => {
           navigation.navigate('Delivery Request Details', {
             title: props.item.title,
-            status: user.user_type === 'PT' ? 'Em progresso' : 'Ativo'
+            shipping: props.item
           });
         }} 
         style={styles.item_view}
