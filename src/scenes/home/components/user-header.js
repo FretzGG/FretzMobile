@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faSignOut, faStar } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,8 @@ import ChatIcon from "./chat-icon";
 
 export default function UserHeader() {
   const navigation = useNavigation();
+
+  const isFocused = useIsFocused();
 
   const { signOut, userToken } = useContext(AuthContext);
   const user = useContext(UserContext);
@@ -27,19 +29,21 @@ export default function UserHeader() {
   }, [user.name])
 
   const loadUnreadMessagesNumber = () => {
-    fetch(server_url + 'api/message/get_unread_message_number/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
-      },
-      body: JSON.stringify({
-        'user': user.id
+    isFocused && (
+      fetch(server_url + 'api/message/get_unread_message_number/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          'user': user.id
+        })
       })
-    })
-    .then(resp => resp.json())
-    .then(jsonResp => setUnreadNo(jsonResp.message_number))
-    .catch(error => console.log(error))
+      .then(resp => resp.json())
+      .then(jsonResp => setUnreadNo(jsonResp.message_number))
+      .catch(error => console.log(error))
+    )
   }
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function UserHeader() {
       loadUnreadMessagesNumber();
     }, 1000)
     return () => clearInterval(interval)
-  }, [ unreadNo ]);
+  }, [ isFocused ]);
 
   return (
     <View style={styles.container}>
