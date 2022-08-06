@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Image, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { UserContext } from "../../../navigators/app-navigator";
@@ -69,7 +69,11 @@ export default function ChatItem (props) {
         })}
       >
         <View style={{flexDirection: 'row'}}>
-          <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
+          { otherUser.profile_pic ? (
+            <Image source={{ uri: otherUser.profile_pic }} style={styles.profile_pic} />
+          ) : (
+            <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
+          )}
           <View style={{justifyContent: 'center',  marginLeft: 10}}>
             <Text style={{color: '#E6E6E6', fontWeight: 'bold'}} >Pedido #{props.chat.shipping}</Text>
             <Text style={{color: '#E6E6E6', fontSize: 10}} >{otherUser.name}</Text>
@@ -104,6 +108,13 @@ const styles = {
     height: 50,
     paddingHorizontal: 10,
     width: '100%'
+  },
+  profile_pic: {
+    width: 35,
+    height: 35,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   notification_circle: {
     width: 22,

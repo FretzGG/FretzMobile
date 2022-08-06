@@ -45,7 +45,7 @@ export default function UserHeader() {
   useEffect(() => {
     const interval = setInterval(() => {
       loadUnreadMessagesNumber();
-    }, 5000)
+    }, 1000)
     return () => clearInterval(interval)
   }, [ unreadNo ]);
 
