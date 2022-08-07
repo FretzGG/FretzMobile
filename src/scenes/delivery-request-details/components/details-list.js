@@ -61,7 +61,7 @@ export default function DetailsList(props) {
       .catch(error => console.log(error))
     )
 
-    shipping.at_auction && (
+    user.user_type === 'PT' && shipping.at_auction && (
       fetch(server_url + 'api/auction/get_user_shipping_bid/', {
         method: 'POST',
         headers: {
