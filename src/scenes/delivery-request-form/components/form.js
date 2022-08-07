@@ -15,21 +15,25 @@ export default function Form(props) {
   const { userToken } = useContext(AuthContext);
   const user = useContext(UserContext);
 
+  const shipping = props.shipping;
+
   const type_options = ['Selecione o tipo de entrega', 'Frágil', 'Perecível', 'Simples', 'Alto Valor', 'Perigosa', 'Pesado', 'Refrigerada'];
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [selectedOption, setSelectedOption] = useState(type_options[0]);
-  const [departureAddress, setDepartureAddress] = useState('')
-  const [deliveryAddress, setDeliveryAddress] = useState('')
-  const [weight, setWeight] = useState('')
-  const [width, setWidth] = useState('')
-  const [length, setLength] = useState('')
-  const [height, setHeight] = useState('')
-  const [deadline, setDeadline] = useState('')
+  const [title, setTitle] = useState(shipping.title)
+  const [description, setDescription] = useState(shipping.load_specifications)
+  const [selectedOption, setSelectedOption] = useState(shipping.load_specifications ? shipping.load_specifications : type_options[0]);
+  const [departureAddress, setDepartureAddress] = useState(shipping.departure_location)
+  const [deliveryAddress, setDeliveryAddress] = useState(shipping.delivery_location)
+  const [weight, setWeight] = useState(shipping.cargo_weight)
+  const [width, setWidth] = useState(shipping.width)
+  const [length, setLength] = useState(shipping.length)
+  const [height, setHeight] = useState(shipping.height)
+  const [deadline, setDeadline] = useState(shipping.deadline)
   const [files, setFiles] = useState([])
   const [suggestedPrice, setSuggestedPrice] = useState('')
+
   const [createShipping, setCreateShipping] = useState(false)
+  const [updateShipping, setUpdateShipping] = useState(false)
 
   useEffect(() => {
     createShipping && (
@@ -64,6 +68,61 @@ export default function Form(props) {
       .catch(error => console.log(error))
     )
   }, [ createShipping ])
+
+  useEffect(() => {
+    updateShipping && (
+      fetch(server_url + 'api/shipping/' + shipping.id + '/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization' : `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          title,
+          load_specifications : description,
+          shipping_type : selectedOption,
+          departure_location : departureAddress,
+          delivery_location : deliveryAddress,
+          cargo_weight : weight !== '' ? weight : null,
+          width: width !== '' ? width : null,
+          length: length !== '' ? length : null,
+          height: height !== '' ? height: null,
+          deadline,
+          opening_bid : suggestedPrice,
+          user_posted : user.id
+        })
+      })
+      .then(resp => {
+        setUpdateShipping(false)
+        if (resp.ok){
+          alert('FRETZ alterado com sucesso!')
+          navigation.navigate('Home');
+        }
+        else alert('Ocorreu algum problema. Tente novamente mais tarde')
+      })
+      .catch(error => console.log(error))
+    )
+  }, [ updateShipping ])
+
+  useEffect(() => {
+    if (shipping.deadline && shipping.opening_bid && shipping.shipping_type) {
+      /* Format deadline from DB to front */
+      const periods = shipping.deadline.split('-');
+      const formatedDate = periods[2] + '/' + periods[1] + '/' + periods[0];
+      setDeadline(formatedDate);
+
+      /* Format opening_bid from DB to front */
+      const values = shipping.opening_bid.toFixed(2).split('.');
+      const integerPart = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+      const priceString = 'R$ ' + integerPart + ',' + values[1]
+      setSuggestedPrice(priceString)
+
+      /* Format shipping_type from DB to front */
+      type_options.forEach((item, index) => {
+        if (item === shipping.shipping_type) setSelectedOption(type_options[index])
+      })
+    }
+  }, [ shipping ])
 
   const checkInput = () => {
     if (!title){
@@ -105,7 +164,9 @@ export default function Form(props) {
       const replaceComma = withoutDots.replace(',', '.')
       setSuggestedPrice(replaceComma)
     }
-    setCreateShipping(true);
+
+    if (Object.keys(shipping).length !== 0 ) setUpdateShipping(true);
+    else setCreateShipping(true);
   }
 
   return (
