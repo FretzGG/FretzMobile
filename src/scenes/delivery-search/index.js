@@ -60,7 +60,7 @@ export default function DeliverySearch(props) {
           screenTitle === 'FRETZ' ? (
             <RequestItem shipping={item} />
           ) : (
-            <OfferItem offer={item} />
+            <OfferItem offer={item} shipping={shippingAuction} />
           )
           }
         />
