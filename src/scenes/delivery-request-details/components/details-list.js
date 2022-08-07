@@ -19,6 +19,9 @@ export default function DetailsList(props) {
   const [deadline, setDeadline] = useState('');
   const [suggestedPrice, setSuggestedPrice] = useState('');
   const [transporterName, setTransporterName] = useState('');
+  const [bid, setBid] = useState(''); 
+  const [madeBid, setMadeBid] = useState([]);
+  const [makeBid, setMakeBid] = useState(false);
 
   const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
@@ -57,7 +60,68 @@ export default function DetailsList(props) {
       .then(jsonResp => setTransporterName(jsonResp.name.split(' ')[0]))
       .catch(error => console.log(error))
     )
+
+    shipping.at_auction && (
+      fetch(server_url + 'api/auction/get_user_shipping_bid/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          user_who_offered: user.id,
+          shipping: shipping.id
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setMadeBid(jsonResp))
+      .catch(error => console.log(error))
+    )
   }, [ shipping ] )
+
+  useEffect(() => {
+    makeBid && (
+      fetch(server_url + 'api/auction/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          shipping: shipping.id,
+          user_who_offered: user.id,
+          bid,
+          deadline
+        })
+      })
+      .then(resp => {
+        if (resp.ok){
+          setMakeBid(false);
+          alert('Lance feito com sucesso! Aguarde uma resposta do criador do anúncio.');
+          navigation.goBack();
+        }
+        else {
+          alert('Ocorreu um problema. Tente novamente mais tarde')
+        }
+      })
+      .catch(error => console.log(error))
+    )
+  }, [ makeBid ]);
+
+  const formatInput = () => {
+    /* Format price */
+    const onlyNumbers = suggestedPrice.split(' ')[1]
+    const withoutDots = onlyNumbers.split('.').join('')
+    const replaceComma = withoutDots.replace(',', '.')
+    setBid(replaceComma)
+
+    /* Format deadline */
+    const periods = deadline.split('/')
+    const formatedDate = periods[2] + '-' + periods[1] + '-' + periods[0]
+    setDeadline(formatedDate)
+
+    setMakeBid(true)
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -72,7 +136,7 @@ export default function DetailsList(props) {
             <Text style={styles.section_title}>Tipo</Text>
             <Text style={[styles.type_and_deadline_text, {textDecorationLine: 'underline'}]}>{ shipping.shipping_type }</Text>
           </View>
-          { shipping.shipping_status === 'Ativo' &&
+          { user.user_type !== 'PT' && shipping.shipping_status === 'Ativo' &&
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Prazo</Text>
             <Text style={styles.type_and_deadline_text}>{ deadline }</Text>
@@ -194,28 +258,35 @@ export default function DetailsList(props) {
               <LargeButton onPress={() => alert('Avaliar entregador!')} title={'Avaliar motorista'} />
             </View>
       : shipping.shipping_status === 'Ativo' ?
-        <View>
-          <Text style={styles.input_title}>Preço</Text>
-          <MaskInput
-            style={styles.text_input}
-            mask={Masks.BRL_CURRENCY}
-            keyboardType={'numeric'}
-            placeholder={'R$ 0,00'}
-            placeholderTextColor={'#37323E'}
-            value={suggestedPrice}
-            onChangeText={setSuggestedPrice}
-          />
-          <Text style={styles.input_title}>Prazo de entrega</Text>
-          <MaskInput
-            style={styles.text_input}
-            mask={Masks.DATE_DDMMYYYY}
-            keyboardType={'numeric'}
-            value={deadline}
-            onChangeText={setDeadline}
-            placeholderTextColor={'#37323E'}
-          />
-          <LargeButton onPress={() => alert('Dar lance nesta entrega!')} title={'Dar Lance'}/>
-        </View>
+          madeBid.length > 0 ?
+            <View style={styles.price_row}>
+              <Text style={styles.price_title}>Seu Lance</Text>
+              <Text style={styles.price_number}>R$ { madeBid[0].bid.toFixed(2).split('.')[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' +  madeBid[0].bid.toFixed(2).split('.')[1] }</Text>
+              <Text style={styles.price_number}>{ madeBid[0].deadline.split('-')[2] + '/' + madeBid[0].deadline.split('-')[1] + '/' + madeBid[0].deadline.split('-')[0] }</Text>
+            </View>
+          :
+            <View>
+              <Text style={styles.input_title}>Preço</Text>
+              <MaskInput
+                style={styles.text_input}
+                mask={Masks.BRL_CURRENCY}
+                keyboardType={'numeric'}
+                placeholder={'R$ 0,00'}
+                placeholderTextColor={'#37323E'}
+                value={suggestedPrice}
+                onChangeText={setSuggestedPrice}
+              />
+              <Text style={styles.input_title}>Prazo de entrega</Text>
+              <MaskInput
+                style={styles.text_input}
+                mask={Masks.DATE_DDMMYYYY}
+                keyboardType={'numeric'}
+                value={deadline}
+                onChangeText={setDeadline}
+                placeholderTextColor={'#37323E'}
+              />
+              <LargeButton onPress={() => formatInput()} title={'Dar Lance'}/>
+            </View>
         : shipping.shipping_status === 'Em Progresso' ?
         <View style={{flex: 3}}>
           <View style={{alignItems: 'center', marginTop: 30}}>
