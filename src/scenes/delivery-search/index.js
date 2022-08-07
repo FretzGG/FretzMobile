@@ -10,6 +10,8 @@ export default function DeliverySearch(props) {
   const { userToken } = useContext(AuthContext);
   const { vehicle } = useContext(UserContext);
 
+  const screenTitle = props.route.params.title;
+
   const [ shippings, setShippings ] = useState([]);
 
   const offers = [
@@ -19,30 +21,32 @@ export default function DeliverySearch(props) {
   ];
 
   useEffect(() => {
-    fetch(server_url + 'api/shipping/get_active_shippings/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userToken}`
-      },
-      body: JSON.stringify({
-        shipping_type: vehicle.vehicle_category
+    screenTitle === 'FRETZ' && (
+      fetch(server_url + 'api/shipping/get_active_shippings/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          shipping_type: vehicle.vehicle_category
+        })
       })
-    })
-    .then(resp => resp.json())
-    .then(jsonResp => setShippings(jsonResp))
-    .catch(error => console.log(error))
+      .then(resp => resp.json())
+      .then(jsonResp => setShippings(jsonResp))
+      .catch(error => console.log(error))
+    )
   }, [ vehicle ])
 
   return (
     <View style={styles.container}>
       <View style={styles.list_view}>
         <FlatList
-          data={props.route.params.title === 'FRETZ' ? shippings : offers}
+          data={screenTitle === 'FRETZ' ? shippings : offers}
           keyExtractor={item => item.id}
           renderItem={({item}) => 
-          props.route.params.title === 'FRETZ' ? (
-            <RequestItem request={item} />
+          screenTitle === 'FRETZ' ? (
+            <RequestItem shipping={item} />
           ) : (
             <OfferItem offer={item} />
           )
