@@ -8,7 +8,7 @@ import ProfileIcon from "../../../components/profile-icon";
 import { server_url } from "../../../utils/utils";
 
 export default function RatingBody() {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
 
   const [ ratings, setRatings ] = useState([])

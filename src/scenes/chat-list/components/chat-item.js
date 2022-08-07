@@ -12,7 +12,7 @@ export default function ChatItem (props) {
   const navigation = useNavigation();
 
   const { userToken } = useContext(AuthContext);
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const [ unreadNo, setUnreadNo ] = useState(0);
   const [ otherUser, setOtherUser ] = useState({});

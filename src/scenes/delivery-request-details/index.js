@@ -9,7 +9,7 @@ import { UserContext } from "../../navigators/app-navigator";
 export default function DeliveryRequestDetails(props) {
   const navigation = useNavigation();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (user.user_type !== 'PT') {

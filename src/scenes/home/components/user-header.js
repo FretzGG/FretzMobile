@@ -15,7 +15,7 @@ export default function UserHeader() {
   const isFocused = useIsFocused();
 
   const { signOut, userToken } = useContext(AuthContext);
-  const user = useContext(UserContext);
+  const { user, vehicle } = useContext(UserContext);
 
   const [name, setName] = useState('');
   const [unreadNo, setUnreadNo] = useState(0);

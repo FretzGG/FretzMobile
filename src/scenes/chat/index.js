@@ -10,7 +10,7 @@ import MessageInput from "./components/message-input";
 import { server_url } from "../../utils/utils";
 
 export default function Chat (props) {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
   
   const navigation = useNavigation();

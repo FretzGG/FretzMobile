@@ -20,7 +20,7 @@ export default function DetailsList(props) {
   const [suggestedPrice, setSuggestedPrice] = useState('');
   const [transporterName, setTransporterName] = useState('');
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
 
   const shipping = props.shipping;

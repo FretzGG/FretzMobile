@@ -9,7 +9,7 @@ import UserIcon from "../../../components/user-icon";
 export default function RatingHeader() {
   const navigation = useNavigation();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const [name, setName] = useState('');
 

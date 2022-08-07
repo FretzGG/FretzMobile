@@ -6,7 +6,7 @@ import ChatItem from "./components/chat-item";
 import { server_url } from "../../utils/utils";
 
 export default function ChatList () {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
 
   const [ chats, setChats ] = useState([]);

@@ -13,7 +13,7 @@ export default function Form(props) {
   const navigation = useNavigation();
   
   const { userToken } = useContext(AuthContext);
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   const shipping = props.shipping;
 

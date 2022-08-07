@@ -11,7 +11,7 @@ import LargeButton from "../../../components/large-button";
 export default function RequestList(){
   const navigation = useNavigation();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
 
   const isFocused = useIsFocused();

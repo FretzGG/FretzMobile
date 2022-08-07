@@ -19,9 +19,10 @@ export default function AppNavigator() {
   const { userToken, userID } = useContext(AuthContext);
 
   const [ user, setUser ] = useState({});
+  const [ vehicle, setVehicle ] = useState({});
 
   useMemo(() => {
-    if(userID != null) {
+    if(userID !== null) {
       fetch(server_url + 'api/profile/' + userID, {
         method: 'GET',
         headers: {
@@ -34,8 +35,26 @@ export default function AppNavigator() {
     }
   }, [ userToken, userID ])
 
+  useMemo(() => {
+    if(user.user_type === 'PT') {
+      fetch(server_url + 'api/vehicle/get_user_vehicle/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          user: userID
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setVehicle(jsonResp[0]))
+      .catch(error => console.log(error))
+    }
+  }, [ user ])
+
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, vehicle }}>
       <Stack.Navigator 
         screenOptions={{
           headerTintColor: '#DEB841',
