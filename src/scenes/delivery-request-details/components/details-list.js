@@ -15,7 +15,7 @@ export default function DetailsList(props) {
   const navigation = useNavigation();
 
   const [attachmentExpanded, setAttachmentExpanded] = useState(false);
-  const [unseenInterests, setUnseenInterests] = useState(0);
+  const [unseenInterests, setUnseenInterests] = useState({});
   const [deadline, setDeadline] = useState('');
   const [suggestedPrice, setSuggestedPrice] = useState('');
   const [transporterName, setTransporterName] = useState('');
@@ -58,6 +58,22 @@ export default function DetailsList(props) {
       })
       .then(resp => resp.json())
       .then(jsonResp => setTransporterName(jsonResp.name.split(' ')[0]))
+      .catch(error => console.log(error))
+    )
+
+    user.user_type !== 'PT' && shipping.at_auction && (
+      fetch(server_url + 'api/auction/get_unseen_offer_number/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          shipping: shipping.id
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setUnseenInterests(jsonResp))
       .catch(error => console.log(error))
     )
 
@@ -220,25 +236,24 @@ export default function DetailsList(props) {
         shipping.shipping_status === 'Ativo' ?
           <View style={styles.price_row}>
             <Text style={styles.price_title}>Preço desejado</Text>
-            <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ { suggestedPrice }</Text>
+            <Text style={styles.price_number}>R$ { suggestedPrice }</Text>
             <TouchableOpacity
               style={styles.auction_button}
               onPress={() => {
-                setUnseenInterests(0);
                 navigation.navigate('Delivery Search', {
                   title: 'Ofertas',
                   shipping
                 })
               }}
               >
-              <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
-              {unseenInterests > 0 && (
+              <Text style={[styles.auction_button_text, unseenInterests.offer_number > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
+              {unseenInterests.offer_number > 0 && (
                 <View style={styles.auction_button_unseen}>
                   <Text style={{
                     color: '#E6E6E6',
                     fontWeight: 'bold',
                   }}>
-                    {unseenInterests}
+                    {unseenInterests.offer_number}
                   </Text>
                 </View>
               )}
