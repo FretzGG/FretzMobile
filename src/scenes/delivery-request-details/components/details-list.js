@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -6,6 +6,8 @@ import { faAngleDown, faAngleUp, faCircle } from "@fortawesome/free-solid-svg-ic
 import { List } from "react-native-paper";
 import MaskInput, { Masks } from "react-native-mask-input";
 import { UserContext } from "../../../navigators/app-navigator";
+import { AuthContext } from "../../../navigators/root-navigator";
+import { server_url } from "../../../utils/utils";
 import PackagePhotos from "./package-photos";
 import LargeButton from "../../../components/large-button";
 
@@ -16,9 +18,14 @@ export default function DetailsList(props) {
   const [unseenInterests, setUnseenInterests] = useState(0);
   const [deadline, setDeadline] = useState('');
   const [suggestedPrice, setSuggestedPrice] = useState('');
+  const [transporterName, setTransporterName] = useState('');
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
+  const { userToken } = useContext(AuthContext);
 
+  const shipping = props.shipping;
+
+  /* Apenas estética */
   const attachments = [{
     title: 'Dimensões da carga',
     description: 'Desenho com dimensões da caixa'
@@ -26,6 +33,31 @@ export default function DetailsList(props) {
     title: 'Nota Fiscal',
     description: ''
   }];
+
+  useEffect(() => {
+    /* Deadline string format */
+    const periods = shipping.deadline.split('-')
+    const formatedDate = periods[2] + '/' + periods[1] + '/' + periods[0]
+    setDeadline(formatedDate)
+
+    /* Price string format */
+    const parts = shipping.opening_bid.toFixed(2).split('.')
+    const integerWithDots = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    setSuggestedPrice(integerWithDots + ',' + parts[1])
+
+    shipping.user_transporter && (
+      fetch(server_url + 'api/profile/' + shipping.user_transporter + '/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        }
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setTransporterName(jsonResp.name.split(' ')[0]))
+      .catch(error => console.log(error))
+    )
+  }, [ shipping ] )
 
   return (
     <ScrollView style={styles.container}>
@@ -38,12 +70,12 @@ export default function DetailsList(props) {
         <View style={{flex: 2}}>
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Tipo</Text>
-            <Text style={[styles.type_and_deadline_text, {textDecorationLine: 'underline'}]}>Frágil</Text>
+            <Text style={[styles.type_and_deadline_text, {textDecorationLine: 'underline'}]}>{ shipping.shipping_type }</Text>
           </View>
-          { props.status === 'Ativo' &&
+          { shipping.shipping_status === 'Ativo' &&
           <View style={styles.type_and_deadline_view}>
             <Text style={styles.section_title}>Prazo</Text>
-            <Text style={styles.type_and_deadline_text}>25/07/2022</Text>
+            <Text style={styles.type_and_deadline_text}>{ deadline }</Text>
           </View>
           }
         </View>
@@ -51,17 +83,35 @@ export default function DetailsList(props) {
       <View style={styles.text_row}>
         <View style={styles.description_and_address_view}>
           <Text style={styles.section_title}>Descrição</Text>
-          <Text style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam blandit purus tellus, eget bibendum quam cursus non. Mauris ut dolor nulla. Integer cursus viverra ornare. Sed id molestie tortor.
-          </Text>
+          <Text style={styles.text}>{ shipping.load_specifications }</Text>
         </View>
-        <View style={styles.description_and_address_view}>
-          <Text style={styles.section_title}>Endereço</Text>
-          <Text style={styles.text}>
-            Avenida Brigadeiro Lima 123, Vila Industrial{"\n"}
-            12223-123{"\n"}
-            São José dos Campos - São Paulo
-          </Text>
+        <View style={[styles.description_and_address_view, { flexDirection: 'row' }]}>
+          <View style={{ width: '50%' }} >
+            <Text style={styles.section_title}>Endereço de retirada</Text>
+            <Text style={styles.text}>{ shipping.departure_location }</Text>
+          </View>
+          <View style={{ width: '50%', marginLeft: 10 }} >
+            <Text style={styles.section_title}>Endereço de entrega</Text>
+            <Text style={styles.text}>{ shipping.delivery_location }</Text>
+          </View>
+        </View>
+        <View style={[styles.description_and_address_view, { flexDirection: 'row' }]}>
+          { shipping.length && shipping.width && shipping.height && (
+            <View style={{ width: '50%' }} >
+              <Text style={styles.section_title}>Dimensões</Text>
+              <Text style={styles.text}>
+                { shipping.length.toFixed(2) + ' x ' + shipping.width.toFixed(2) + ' x ' + shipping.height.toFixed(2) + ' m' }
+              </Text>
+            </View>
+          )}
+          { shipping.cargo_weight && (
+            <View style={[{ width: '50%' }, shipping.length && shipping.width && shipping.height && { marginLeft: 10 }]} >
+              <Text style={styles.section_title}>Peso</Text>
+              <Text style={styles.text}>
+                { shipping.cargo_weight.toFixed(2) + ' Kg' }
+              </Text>
+            </View>
+          )}
         </View>
       </View>
       <List.Accordion
@@ -102,32 +152,48 @@ export default function DetailsList(props) {
           </TouchableOpacity>
         ))}
       </List.Accordion>
-      {user.type !== 'Motorista' && props.status === 'Ativo' ?
-        <View style={styles.price_row}>
-          <Text style={styles.price_title}>Preço desejado</Text>
-          <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ 500,00</Text>
-          <TouchableOpacity
-            style={styles.auction_button}
-            onPress={() => {
-              setUnseenInterests(0);
-              navigation.navigate('Delivery Search', {
-                title: 'Ofertas'
-              })
-          }}>
-            <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
-            {unseenInterests > 0 && (
-              <View style={styles.auction_button_unseen}>
-                <Text style={{
-                  color: '#E6E6E6',
-                  fontWeight: 'bold',
-                }}>
-                  {unseenInterests}
-                </Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        </View>
-        : props.status === 'Ativo' ?
+      {user.user_type !== 'PT' ?
+        shipping.shipping_status === 'Ativo' ?
+          <View style={styles.price_row}>
+            <Text style={styles.price_title}>Preço desejado</Text>
+            <Text onPress={() => setUnseenInterests(unseenInterests + 1)} style={styles.price_number}>R$ { suggestedPrice }</Text>
+            <TouchableOpacity
+              style={styles.auction_button}
+              onPress={() => {
+                setUnseenInterests(0);
+                navigation.navigate('Delivery Search', {
+                  title: 'Ofertas'
+                })
+              }}
+              >
+              <Text style={[styles.auction_button_text, unseenInterests > 0 && {paddingEnd: 40}]}>Motoristas Interessados</Text>
+              {unseenInterests > 0 && (
+                <View style={styles.auction_button_unseen}>
+                  <Text style={{
+                    color: '#E6E6E6',
+                    fontWeight: 'bold',
+                  }}>
+                    {unseenInterests}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+        : shipping.shipping_status === 'Em Progresso' ?
+            <View style={styles.price_row}>
+              <Text style={styles.price_title}>Entregador</Text>
+              <Text style={styles.price_number}>{ transporterName }</Text>
+              <Text style={[styles.price_title, { marginTop: 20 }]}>Prazo de Entrega</Text>
+              <Text style={styles.price_number}>{deadline}</Text>
+              <Text style={[styles.price_title, { textDecorationLine: 'underline', marginTop: 20 }]}>FRETZ a caminho!</Text>
+            </View>
+          :
+            <View style={styles.price_row}>
+              <Text style={styles.price_title}>FRETZ</Text>
+              <Text style={[styles.type_and_deadline_text, { textDecorationLine: 'underline', fontSize: 40}]}>Finalizado</Text>
+              <LargeButton onPress={() => alert('Avaliar entregador!')} title={'Avaliar motorista'} />
+            </View>
+      : shipping.shipping_status === 'Ativo' ?
         <View>
           <Text style={styles.input_title}>Preço</Text>
           <MaskInput
@@ -148,15 +214,22 @@ export default function DetailsList(props) {
             onChangeText={setDeadline}
             placeholderTextColor={'#37323E'}
           />
-          <LargeButton title={'Dar Lance'}/>
+          <LargeButton onPress={() => alert('Dar lance nesta entrega!')} title={'Dar Lance'}/>
         </View>
-        :
+        : shipping.shipping_status === 'Em Progresso' ?
         <View style={{flex: 3}}>
           <View style={{alignItems: 'center', marginTop: 30}}>
             <Text style={styles.price_title}>Prazo</Text>
-            <Text style={styles.price_number}>25/07/2022</Text>
+            <Text style={styles.price_number}>{ deadline }</Text>
           </View>
           <LargeButton title={'Finalizar FRETZ'}/>
+        </View>
+        : 
+        <View style={{flex: 3}}>
+          <View style={{alignItems: 'center', marginTop: 30}}>
+            <Text style={styles.price_title}>FRETZ</Text>
+            <Text style={[styles.type_and_deadline_text, { textDecorationLine: 'underline', fontSize: 40}]}>Finalizado</Text>
+          </View>
         </View>
       }
     </ScrollView>

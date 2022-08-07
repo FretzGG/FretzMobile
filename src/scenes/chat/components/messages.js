@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { UserContext } from "../../../navigators/app-navigator";
 
 export default function Messages (props) {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <View style={styles.container}>

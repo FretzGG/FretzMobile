@@ -1,29 +1,177 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
 import DocumentPicker, { types } from 'react-native-document-picker'
+import { server_url } from "../../../utils/utils";
+import { AuthContext } from "../../../navigators/root-navigator";
+import { UserContext } from "../../../navigators/app-navigator";
 import LargeButton from "../../../components/large-button";
 
 export default function Form(props) {
   const navigation = useNavigation();
-  // TODO: Descobrir forma de altera o valor previsto
-  // TODO: Mostrar todos os arquivos selecionados
+  
+  const { userToken } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
 
-  const type_options = ['Frágil', 'Perecível'];
+  const shipping = props.shipping;
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
-  const [selectedOption, setSelectedOption] = useState(type_options[0]);
-  const [address, setAddress] = useState('')
-  const [deadline, setDeadline] = useState('')
+  const type_options = ['Selecione o tipo de entrega', 'Frágil', 'Perecível', 'Simples', 'Alto Valor', 'Perigosa', 'Pesado', 'Refrigerada'];
+
+  const [title, setTitle] = useState(shipping.title)
+  const [description, setDescription] = useState(shipping.load_specifications)
+  const [selectedOption, setSelectedOption] = useState(shipping.load_specifications ? shipping.load_specifications : type_options[0]);
+  const [departureAddress, setDepartureAddress] = useState(shipping.departure_location)
+  const [deliveryAddress, setDeliveryAddress] = useState(shipping.delivery_location)
+  const [weight, setWeight] = useState(shipping.cargo_weight)
+  const [width, setWidth] = useState(shipping.width)
+  const [length, setLength] = useState(shipping.length)
+  const [height, setHeight] = useState(shipping.height)
+  const [deadline, setDeadline] = useState(shipping.deadline)
   const [files, setFiles] = useState([])
   const [suggestedPrice, setSuggestedPrice] = useState('')
 
+  const [createShipping, setCreateShipping] = useState(false)
+  const [updateShipping, setUpdateShipping] = useState(false)
+
+  useEffect(() => {
+    createShipping && (
+      fetch(server_url + 'api/shipping/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', 'Authorization' : `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          title,
+          load_specifications : description,
+          shipping_type : selectedOption,
+          departure_location : departureAddress,
+          delivery_location : deliveryAddress,
+          cargo_weight : weight !== '' ? weight : null,
+          width: width !== '' ? width : null,
+          length: length !== '' ? length : null,
+          height: height !== '' ? height: null,
+          deadline,
+          opening_bid : suggestedPrice,
+          user_posted : user.id
+        })
+      })
+      .then(resp => {
+        setCreateShipping(false)
+        if (resp.ok){
+          alert('FRETZ criado com sucesso!')
+          navigation.goBack();
+        }
+        else alert('Ocorreu algum problema. Tente novamente mais tarde')
+      })
+      .catch(error => console.log(error))
+    )
+  }, [ createShipping ])
+
+  useEffect(() => {
+    updateShipping && (
+      fetch(server_url + 'api/shipping/' + shipping.id + '/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json', 
+          'Authorization' : `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          title,
+          load_specifications : description,
+          shipping_type : selectedOption,
+          departure_location : departureAddress,
+          delivery_location : deliveryAddress,
+          cargo_weight : weight !== '' ? weight : null,
+          width: width !== '' ? width : null,
+          length: length !== '' ? length : null,
+          height: height !== '' ? height: null,
+          deadline,
+          opening_bid : suggestedPrice,
+          user_posted : user.id
+        })
+      })
+      .then(resp => {
+        setUpdateShipping(false)
+        if (resp.ok){
+          alert('FRETZ alterado com sucesso!')
+          navigation.navigate('Home');
+        }
+        else alert('Ocorreu algum problema. Tente novamente mais tarde')
+      })
+      .catch(error => console.log(error))
+    )
+  }, [ updateShipping ])
+
+  useEffect(() => {
+    if (shipping.deadline && shipping.opening_bid && shipping.shipping_type) {
+      /* Format deadline from DB to front */
+      const periods = shipping.deadline.split('-');
+      const formatedDate = periods[2] + '/' + periods[1] + '/' + periods[0];
+      setDeadline(formatedDate);
+
+      /* Format opening_bid from DB to front */
+      const values = shipping.opening_bid.toFixed(2).split('.');
+      const integerPart = values[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+      const priceString = 'R$ ' + integerPart + ',' + values[1]
+      setSuggestedPrice(priceString)
+
+      /* Format shipping_type from DB to front */
+      type_options.forEach((item, index) => {
+        if (item === shipping.shipping_type) setSelectedOption(type_options[index])
+      })
+    }
+  }, [ shipping ])
+
+  const checkInput = () => {
+    if (!title){
+      alert('O campo nome da carga é obrigatório')
+      return ;
+    }
+    if (!description){
+      alert('O campo descrição é obrigatório')
+      return ;
+    }
+    if (selectedOption == type_options[0]){
+      alert('O campo tipo deve ser selecionado')
+      return ;
+    }
+    if (!departureAddress){
+      alert('O campo endereço de saída é obrigatório')
+      return ;
+    }
+    if (!deliveryAddress){
+      alert('O campo endereço de entrega é obrigatório')
+      return ;
+    }
+    if (!deadline){
+      alert('O campo prazo é obrigatório')
+      return ;
+    }
+    else {
+      const periods = deadline.split('/')
+      const formatedDate = periods[2] + '-' + periods[1] + '-' + periods[0]
+      setDeadline(formatedDate)
+    }
+    if (!suggestedPrice){
+      alert('O campo preço sugerido é obrigatório')
+      return ;
+    }
+    else {
+      const onlyNumbers = suggestedPrice.split(' ')[1]
+      const withoutDots = onlyNumbers.split('.').join('')
+      const replaceComma = withoutDots.replace(',', '.')
+      setSuggestedPrice(replaceComma)
+    }
+
+    if (Object.keys(shipping).length !== 0 ) setUpdateShipping(true);
+    else setCreateShipping(true);
+  }
+
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.input_title}>Nome da Carga</Text>
+      <Text style={styles.input_title}>Nome da Carga *</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
@@ -39,25 +187,64 @@ export default function Form(props) {
         value={description}
         onChangeText={setDescription}
       />
-      <Text style={styles.input_title}>Tipo</Text>
+      <Text style={styles.input_title}>Tipo *</Text>
       <ModalDropdown 
-        options={type_options}
+        options={type_options.slice(1, type_options.length)}
         dropdownStyle={styles.dropdown_style}
         dropdownTextStyle={styles.dropdown_text_options}
-        onSelect={(index) => setSelectedOption(type_options[index])}
+        onSelect={(index) => setSelectedOption(type_options[index + 1])}
       >
         <View style={styles.dropdown_button}>
           <Text style={styles.dropdown_text_selected}>{selectedOption}</Text>
         </View>
       </ModalDropdown>
-      <Text style={styles.input_title}>Endereço</Text>
+      <Text style={styles.input_title}>Endereço de saída *</Text>
       <TextInput 
         style={styles.text_input}
         autoCapitalize={'sentences'}
-        value={address}
-        onChangeText={setAddress}
+        value={departureAddress}
+        onChangeText={setDepartureAddress}
       />
-      <Text style={styles.input_title}>Prazo de entrega</Text>
+      <Text style={styles.input_title}>Endereço de entrega *</Text>
+      <TextInput 
+        style={styles.text_input}
+        autoCapitalize={'sentences'}
+        value={deliveryAddress}
+        onChangeText={setDeliveryAddress}
+      />
+      <Text style={styles.input_title}>Peso da carga (em Kg)</Text>
+      <TextInput 
+        style={styles.text_input}
+        autoCapitalize={'sentences'}
+        keyboardType={'numeric'}
+        value={weight}
+        onChangeText={setWeight}
+      />
+      <Text style={styles.input_title}>Largura (em m)</Text>
+      <TextInput 
+        style={styles.text_input}
+        autoCapitalize={'sentences'}
+        keyboardType={'numeric'}
+        value={width}
+        onChangeText={setWidth}
+      />
+      <Text style={styles.input_title}>Comprimento (em m)</Text>
+      <TextInput 
+        style={styles.text_input}
+        autoCapitalize={'sentences'}
+        keyboardType={'numeric'}
+        value={length}
+        onChangeText={setLength}
+      />
+      <Text style={styles.input_title}>Altura (em m)</Text>
+      <TextInput 
+        style={styles.text_input}
+        autoCapitalize={'sentences'}
+        keyboardType={'numeric'}
+        value={height}
+        onChangeText={setHeight}
+      />
+      <Text style={styles.input_title}>Prazo de entrega *</Text>
       <MaskInput
         style={styles.text_input}
         mask={Masks.DATE_DDMMYYYY}
@@ -89,7 +276,7 @@ export default function Form(props) {
         </Text>
       </TouchableOpacity>
       <View style={styles.price_view}>
-        <Text style={styles.price_title}>Valor previsto</Text>
+        <Text style={styles.price_title}>Valor previsto *</Text>
         <MaskInput
           style={styles.price_number}
           mask={Masks.BRL_CURRENCY}
@@ -106,7 +293,9 @@ export default function Form(props) {
           'Criar' 
           : 'Salvar'
         }
-        onPress={() => navigation.goBack()}
+        onPress={() => {
+          checkInput()
+        }}
       />
     </ScrollView>
   );
@@ -156,7 +345,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: "96%",
     height: 44,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
+    marginTop: 10
   },
   dropdown_text_selected:{
     color: '#37323E',

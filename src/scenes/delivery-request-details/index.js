@@ -9,29 +9,31 @@ import { UserContext } from "../../navigators/app-navigator";
 export default function DeliveryRequestDetails(props) {
   const navigation = useNavigation();
 
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (user.type !== 'Motorista') {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity 
-          onPress={() => {
-            navigation.navigate('Delivery Request Form', {
-              title: 'Editar ' + props.route.params.title
-            })
-          }}>
-            <FontAwesomeIcon 
-              icon={faPenToSquare}
-              color='#DEB841'
-              size={25}
-            />
-        </TouchableOpacity>
-      )
-    })
-  }});
+    if (user.user_type !== 'PT') {
+      navigation.setOptions({
+        headerRight: () => (
+          <TouchableOpacity 
+            onPress={() => {
+              navigation.navigate('Delivery Request Form', {
+                title: 'Editar ' + props.route.params.title,
+                shipping: props.route.params.shipping
+              })
+            }}>
+              <FontAwesomeIcon 
+                icon={faPenToSquare}
+                color='#DEB841'
+                size={25}
+              />
+          </TouchableOpacity>
+        )
+      })
+    }
+  });
 
   return (
-    <DetailsList status={props.route.params.status}/>
+    <DetailsList shipping={props.route.params.shipping} />
   );
 }
