@@ -16,6 +16,7 @@ export default function ChatItem (props) {
 
   const [ unreadNo, setUnreadNo ] = useState(0);
   const [ otherUser, setOtherUser ] = useState({});
+  const [ shipping, setShipping ] = useState('');
 
   const other_user_id = user.id !== props.chat.user_one ? props.chat.user_one : props.chat.user_two;
 
@@ -29,6 +30,19 @@ export default function ChatItem (props) {
     })
     .then(resp => resp.json())
     .then(jsonResp => setOtherUser(jsonResp))
+    .catch(error => console.log(error))
+  }, [ props.chat ])
+
+  useEffect(() => {
+    fetch(server_url + 'api/shipping/' + props.chat.shipping + ' /', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      }
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setShipping(jsonResp))
     .catch(error => console.log(error))
   }, [ props.chat ])
 
@@ -61,7 +75,7 @@ export default function ChatItem (props) {
       <TouchableOpacity 
         style={styles.item_view}
         onPress={() => navigation.navigate('Chat', {
-          title: 'Pedido #' + props.chat.shipping,
+          title: shipping.title,
           chat_id: props.chat.id,
           other_user_name: otherUser.name,
           other_user_id: other_user_id,
@@ -75,8 +89,8 @@ export default function ChatItem (props) {
             <ProfileIcon iconSize={30} iconColor={'#37323E'} circleRadius={40} circleColor={'#DEB841'} />
           )}
           <View style={{justifyContent: 'center',  marginLeft: 10}}>
-            <Text style={{color: '#E6E6E6', fontWeight: 'bold'}} >Pedido #{props.chat.shipping}</Text>
-            <Text style={{color: '#E6E6E6', fontSize: 10}} >{otherUser.name}</Text>
+            <Text style={{color: '#E6E6E6', fontWeight: 'bold'}} >{ shipping.title }</Text>
+            <Text style={{color: '#E6E6E6', fontSize: 10}} >por {otherUser.name}</Text>
           </View>
         </View>
         <View style={{ flexDirection: 'row' }} >
