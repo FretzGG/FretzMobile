@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import MaskInput, { Masks } from "react-native-mask-input";
 import { server_url } from '../../../utils/utils';
@@ -15,6 +15,8 @@ export default function Centro() {
   const [telnumber, setTelnumber] = useState('')
   const [password, setPassword] = useState('')
   const [repeatedPassword, setRepeatedPassword] = useState('')
+
+  const [ userInfo, setUserInfo ] = useState({})
 
   const createPFUser = () => {
     fetch(server_url + 'api/users/', {
@@ -40,34 +42,44 @@ export default function Centro() {
         })
       })
       .then(resp => resp.json())
-      .then(jsonResp => { 
-        fetch(server_url + 'api/profile/' + jsonResp.id + '/', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${jsonResp.token}`
-          },
-          body: JSON.stringify({
-            user: jsonResp.id,
-            name,
-            address,
-            cpf,
-            email,
-            phone_number: telnumber,
-            user_type: 'PF'
-          })
-        })
-        .then(resp => resp.json())
-        .then(jsonResp => {
-          alert('Usuário criado com sucesso!');
-          navigation.navigate('Login')
-        })
-        .catch(error => console.log(error))
-      })
+      .then(jsonResp => setUserInfo(jsonResp))
       .catch(error => console.log(error))
     })
     .catch(error => console.log(error))
   }
+
+  useEffect(() => {
+    Object.keys(userInfo).length > 0 && (
+      fetch(server_url + 'api/profile/' + userInfo.id + '/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userInfo.token}`
+        },
+        body: JSON.stringify({
+          user: userInfo.id,
+          name,
+          address,
+          cpf,
+          email,
+          phone_number: telnumber,
+          user_type: 'PF'
+        })
+      })
+      .then(resp => {
+        if (resp.ok){
+          alert('Usuário criado com sucesso!');
+          navigation.navigate('Login')
+        }
+        else {
+          alert('Ocorreu algum problema. Tente novamente mais tarde.');
+        }
+        return resp.json()
+      })
+      .then(jsonResp => console.log(jsonResp))
+      .catch(error => console.log(error))
+    )
+  }, [ userInfo ])
 
   const checkInput = () => {
     if (!name){

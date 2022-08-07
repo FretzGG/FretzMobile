@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, TouchableOpacity, TextInput, StyleSheet, ScrollView } from 'react-native';
 import ModalDropdown from "react-native-modal-dropdown";
 import MaskInput, { Masks } from "react-native-mask-input";
@@ -26,6 +26,10 @@ export default function Centro() {
   const [vehiclemodel, setVehiclemodel] = useState('')
   const [vehiclecategory, setVehiclecategory] = useState(type_options[0])
   const [vehiclecolor, setVehiclecolor] = useState('')
+
+  const [ userInfo, setUserInfo ] = useState({});
+  const [ updateProfile, setUpdateProfile ] = useState(false);
+  const [ createVehicle, setCreateVehicle ] = useState(false);
 
   const createPTUser = () => {
     fetch(server_url + 'api/users/', {
@@ -56,61 +60,69 @@ export default function Centro() {
         })
       })
       .then(resp => resp.json())
-      .then(jsonResp => updateProfile(jsonResp))
+      .then(jsonResp => setUserInfo(jsonResp))
       .catch(error => console.log(error))
     })
     .catch(error => console.log(error))
   }
 
-  const updateProfile = (userInfo) => {
-    fetch(server_url + 'api/profile/' + userInfo.id + '/', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userInfo.token}`
-      },
-      body: JSON.stringify({
-        user: userInfo.id,
-        name,
-        address,
-        cpf,
-        email,
-        phone_number: telnumber,
-        user_type: 'PT'
-      })
-    })
-    .then(resp => resp.json())
-    .then(jsonResp => createVehicle(userInfo))
-    .catch(error => console.log(error))
-  }
+  useEffect(() => {
+    Object.keys(userInfo).length > 0 && setUpdateProfile(true)
+  }, [ userInfo ])
 
-  const createVehicle = (userInfo) => {
-    fetch(server_url + 'api/vehicle/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Token ${userInfo.token}`
-      },
-      body: JSON.stringify({
-        user: userInfo.id,
-        vehicle_license_plate: vehicleplate,
-        vehicle_model: vehiclemodel,
-        vehicle_category: vehiclecategory,
-        vehicle_color: vehiclecolor,
+  useEffect(() => {
+    updateProfile && (
+      fetch(server_url + 'api/profile/' + userInfo.id + '/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userInfo.token}`
+        },
+        body: JSON.stringify({
+          user: userInfo.id,
+          name,
+          address,
+          cpf,
+          email,
+          phone_number: telnumber,
+          user_type: 'PT'
+        })
       })
-    })
-    .then(resp => {
-      if(!resp.ok){
-        alert('Erro ao criar veículo. Tente novamente')
-        return ;
-      }
-    })
-    .then(() => {
-      alert('Usuário criado com sucesso!');
-      navigation.navigate('Login')
-    })
-    .catch(error => console.log(error))
-  }
+      .then(resp => resp.json())
+      .then(jsonResp => setCreateVehicle(true))
+      .catch(error => console.log(error))
+    )
+  }, [ updateProfile ])
+
+  useEffect(() => {
+    createVehicle && (
+      fetch(server_url + 'api/vehicle/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userInfo.token}`
+        },
+        body: JSON.stringify({
+          user: userInfo.id,
+          vehicle_license_plate: vehicleplate,
+          vehicle_model: vehiclemodel,
+          vehicle_category: vehiclecategory,
+          vehicle_color: vehiclecolor,
+        })
+      })
+      .then(resp => {
+        if(!resp.ok){
+          alert('Erro ao criar veículo. Tente novamente')
+          return ;
+        }
+      })
+      .then(() => {
+        alert('Usuário criado com sucesso!');
+        navigation.navigate('Login')
+      })
+      .catch(error => console.log(error))
+    )
+  }, [ createVehicle ])
 
   const checkInput = () => {
     if (!name){
