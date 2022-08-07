@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faAngleDown, faAngleUp, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { List } from "react-native-paper";
@@ -137,6 +137,59 @@ export default function DetailsList(props) {
     setDeadline(formatedDate)
 
     setMakeBid(true)
+  }
+
+  const confirmDelivery = () => {
+    Alert.alert(
+      'Finalizar FRETZ',
+      'A entrega foi realmente concluída? Após confirmar não será possível voltar atrás.',
+      [
+        { text: 'Yes', onPress: finalizeDelivery },
+        { text: 'No', onPress: () => Alert.alert('Entrega não efetuada', 'Quando o FRETZ realmente for concluído, pressione o botão novamente.') }
+      ]
+    )
+  }
+
+  const finalizeDelivery = () => {
+    fetch(server_url + 'api/shipping/' + shipping.id + '/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        user_posted: shipping.user_posted,
+        title: shipping.title,
+        shipping_type: shipping.shipping_type,
+        deadline: shipping.deadline,
+        delivery_location: shipping.delivery_location,
+        departure_location: shipping.departure_location,
+        post_date: shipping.post_date,
+        load_specifications: shipping.load_specifications,
+        cargo_weight: shipping.cargo_weight,
+        width: shipping.width,
+        length: shipping.length,
+        height: shipping.height,
+        at_auction: shipping.at_auction,
+        opening_bid: shipping.opening_bid,
+        user_transporter: shipping.user_transporter,
+        vehicle: shipping.vehicle,
+        // Fields that need to change
+        shipping_status: 'Finalizado'
+      })
+    })
+    .then(resp => {
+      if (resp.ok) {
+        alert('FRETZ finalizado com sucesso! Muito obrigado pelo trabalho');
+        navigation.navigate('Home');
+      }
+      else {
+        alert('Ocorreu um problema, tente novamente mais tarde');
+      }
+      return resp.json()
+    })
+    .then(jsonResp => console.log(jsonResp))
+    .catch(error => console.log(error))
   }
 
   return (
@@ -309,7 +362,7 @@ export default function DetailsList(props) {
             <Text style={styles.price_title}>Prazo</Text>
             <Text style={styles.price_number}>{ deadline }</Text>
           </View>
-          <LargeButton title={'Finalizar FRETZ'}/>
+          <LargeButton onPress={confirmDelivery} title={'Finalizar FRETZ'}/>
         </View>
         : 
         <View style={{flex: 3}}>
