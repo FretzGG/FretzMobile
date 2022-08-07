@@ -226,7 +226,8 @@ export default function DetailsList(props) {
               onPress={() => {
                 setUnseenInterests(0);
                 navigation.navigate('Delivery Search', {
-                  title: 'Ofertas'
+                  title: 'Ofertas',
+                  shipping
                 })
               }}
               >

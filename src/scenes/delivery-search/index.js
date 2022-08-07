@@ -11,14 +11,10 @@ export default function DeliverySearch(props) {
   const { vehicle } = useContext(UserContext);
 
   const screenTitle = props.route.params.title;
+  const shippingAuction = props.route.params.shipping;
 
   const [ shippings, setShippings ] = useState([]);
-
-  const offers = [
-    {id: 1, driverName:'Guguinha Santos', bet: 500, deadline: '25/07/2022', rating: 4.87},
-    {id: 2, driverName:'Guguinha Souza', bet: 400, deadline: '21/07/2022', rating: 4.43},
-    {id: 3, driverName:'Guguinha Silva', bet: 300, deadline: '22/07/2022', rating: 4.95}
-  ];
+  const [ offers, setOffers ] = useState([]);
 
   useEffect(() => {
     screenTitle === 'FRETZ' && (
@@ -37,6 +33,22 @@ export default function DeliverySearch(props) {
       .catch(error => console.log(error))
     )
   }, [ vehicle ])
+
+  useEffect(() => {
+    shippingAuction && fetch(server_url + 'api/auction/get_shipping_auction/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userToken}`
+      },
+      body: JSON.stringify({
+        shipping: shippingAuction.id
+      })
+    })
+    .then(resp => resp.json())
+    .then(jsonResp => setOffers(jsonResp))
+    .catch(error => console.log(error))
+  }, [ shippingAuction ])
 
   return (
     <View style={styles.container}>
