@@ -19,7 +19,7 @@ export default function RatingBody() {
   const [ fiveStars, setFiveStar ] = useState(0)
 
   useEffect(() => {
-    fetch(server_url + 'api/ratings/get_user_ratings/', {
+    fetch(server_url + 'api/rating/get_user_ratings/', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${userToken}`,
@@ -74,8 +74,8 @@ export default function RatingBody() {
           <>
             <View style={styles.section} >
               <View style={{flexDirection: 'row', alignItems: 'center', marginBottom: 5}}>
-                <FontAwesomeIcon icon={faStar} color={'#DEB841'} />
-                <Text style={styles.title}> {user.avg_rating.toFixed(2)} / 5.00</Text>
+                { user.avg_rating > 0 && (<FontAwesomeIcon icon={faStar} color={'#DEB841'} />)}
+                <Text style={[styles.title, user.avg_rating < 0 && { marginLeft: -5 }]}> { user.avg_rating > 0 ? user.avg_rating.toFixed(2) + ' / 5.00' : 'Realize seu primeiro FRETZ!'}</Text>
               </View>
               <Text style={styles.text}>{user.number_of_ratings} avaliações</Text>
             </View>

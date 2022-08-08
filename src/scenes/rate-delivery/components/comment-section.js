@@ -1,18 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import LargeButton from "../../../components/large-button";
 
 export default function CommentSection(props) {
-  const [comment, setComment] = useState('');
-
-  const checkInput = () => {
-    if (props.stars === 0) {
-      alert('Por favor, selecione a nota que deseja dar ao motorista')
-      return ;
-    }
-    alert('Rate driver')
-  }
-
   return (
     <View style={{flex: 1, justifyContent: 'flex-end'}}>
       <View style={{marginLeft: 20}}>
@@ -22,14 +11,10 @@ export default function CommentSection(props) {
           autoCapitalize={'sentences'}
           multiline={true}
           numberOfLines={4}
-          value={comment}
-          onChangeText={setComment}
+          value={props.comment}
+          onChangeText={props.setComment}
         />
       </View>
-      <LargeButton 
-        title={'Avaliar'}
-        onPress={checkInput}
-      />
     </View>
   );
 }

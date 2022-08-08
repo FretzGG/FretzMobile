@@ -33,14 +33,9 @@ export default function RatingHeader() {
         <Text style={styles.rating_screen_title}>Avaliações</Text>
         <Text style={styles.user_name}>{name}</Text>
       </View>
-      <TouchableOpacity // Depois voltar isso para View
-        style={[styles.center, {flex: 2}]}
-        onPress={() => {
-          navigation.navigate('Rate Delivery')
-        }}
-      >
+      <View style={[styles.center, {flex: 2}]} >
         <UserIcon profile_pic={user.profile_pic} user_type={user.user_type} />
-      </TouchableOpacity>
+      </View>
     </View>
   );
 }
