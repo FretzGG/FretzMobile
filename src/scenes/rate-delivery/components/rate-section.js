@@ -1,20 +1,22 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import ProfileIcon from "../../../components/profile-icon";
 
 export default function RateSelection(props) {
-  const driver = {
-    name: 'Guguinha da Silva'
-  }
+  const userEvaluated = props.userEvaluated;
 
   return (
     <View style={{flex:1, alignItems: 'center'}}>
       <View style={{marginTop: 40}}>
-        <ProfileIcon iconSize={65} iconColor={'#37323E'} circleRadius={100} circleColor={'#DEB841'} />
+        { userEvaluated.profile_pic ? (
+          <Image source={{ uri: userEvaluated.profile_pic }} style={styles.profile_pic} />
+        ) : (
+          <ProfileIcon iconSize={65} iconColor={'#37323E'} circleRadius={100} circleColor={'#DEB841'} />
+        )}
       </View>
-      <Text style={styles.name}>{driver.name}</Text>
+      <Text style={styles.name}>{userEvaluated.name}</Text>
       <View style={styles.stars}>
         <TouchableOpacity onPress={() => props.setStars(1)}>
           <FontAwesomeIcon icon={faStar} size={50} color={props.stars > 0 ? '#DEB841' : '#6D6A75'} />
@@ -47,5 +49,12 @@ const styles = StyleSheet.create({
   stars: {
     marginTop: 20,
     flexDirection: 'row',
+  },
+  profile_pic: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 })

@@ -324,7 +324,7 @@ export default function DetailsList(props) {
             <View style={styles.price_row}>
               <Text style={styles.price_title}>FRETZ</Text>
               <Text style={[styles.type_and_deadline_text, { textDecorationLine: 'underline', fontSize: 40}]}>Finalizado</Text>
-              <LargeButton onPress={() => alert('Avaliar entregador!')} title={'Avaliar motorista'} />
+              <LargeButton onPress={() => navigation.navigate('Rate Delivery', { shipping })} title={'Avaliar motorista'} />
             </View>
       : shipping.shipping_status === 'Ativo' ?
           madeBid.length > 0 ?
