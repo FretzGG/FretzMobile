@@ -22,6 +22,7 @@ export default function DetailsList(props) {
   const [bid, setBid] = useState(''); 
   const [madeBid, setMadeBid] = useState([]);
   const [makeBid, setMakeBid] = useState(false);
+  const [alreadyRated, setAlreadyRated] = useState(false);
 
   const { user } = useContext(UserContext);
   const { userToken } = useContext(AuthContext);
@@ -91,6 +92,22 @@ export default function DetailsList(props) {
       })
       .then(resp => resp.json())
       .then(jsonResp => setMadeBid(jsonResp))
+      .catch(error => console.log(error))
+    )
+
+    user.user_type !== 'PT' && shipping.shipping_status === 'Finalizado' && (
+      fetch(server_url + 'api/rating/get_shipping_rating/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${userToken}`
+        },
+        body: JSON.stringify({
+          shipping: shipping.id
+        })
+      })
+      .then(resp => resp.json())
+      .then(jsonResp => setAlreadyRated(jsonResp.length > 0))
       .catch(error => console.log(error))
     )
   }, [ shipping ] )
@@ -324,7 +341,7 @@ export default function DetailsList(props) {
             <View style={styles.price_row}>
               <Text style={styles.price_title}>FRETZ</Text>
               <Text style={[styles.type_and_deadline_text, { textDecorationLine: 'underline', fontSize: 40}]}>Finalizado</Text>
-              <LargeButton onPress={() => navigation.navigate('Rate Delivery', { shipping })} title={'Avaliar motorista'} />
+              { !alreadyRated && (<LargeButton onPress={() => navigation.navigate('Rate Delivery', { shipping })} title={'Avaliar motorista'} />)}
             </View>
       : shipping.shipping_status === 'Ativo' ?
           madeBid.length > 0 ?

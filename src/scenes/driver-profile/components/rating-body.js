@@ -19,7 +19,7 @@ export default function RatingBody() {
   const [ fiveStars, setFiveStar ] = useState(0)
 
   useEffect(() => {
-    fetch(server_url + 'api/ratings/get_user_ratings/', {
+    fetch(server_url + 'api/rating/get_user_ratings/', {
       method: 'POST',
       headers: {
         'Authorization': `Token ${userToken}`,
