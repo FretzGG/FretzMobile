@@ -49,7 +49,8 @@ export default function RateDelivery(props) {
         profile_evaluator: user.id,
         profile_evaluated: userEvaluated.id,
         shipping: shipping.id,
-        stars
+        stars,
+        comment
       })
     })
     .then(resp => {

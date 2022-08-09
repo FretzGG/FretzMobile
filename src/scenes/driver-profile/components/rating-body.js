@@ -109,7 +109,7 @@ export default function RatingBody() {
                 <View>
                   <View style={{flexDirection: 'row'}}>
                     <Text style={styles.title}>{item.profile_evaluator}</Text>
-                    <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({dateFormated(item.rating_date_time)})</Text>
+                    <Text style={[styles.text, {paddingStart: 5, paddingTop: 5}]}>({dateFormated(item.date)})</Text>
                   </View>
                   <View style={{paddingTop: 5, flexDirection: 'row'}}>
                     {item.stars > 0 ? <FontAwesomeIcon icon={faStar} color={'#DEB841'}/> : <FontAwesomeIcon icon={faStar} color={'#6D6A75'}/>}
